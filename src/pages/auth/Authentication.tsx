@@ -12,7 +12,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {CalendarIcon} from "lucide-react";
 import {format} from "date-fns";
 import {cn} from "@/lib/utils";
-import type {AuthValues, LoginValues, RegisterValues} from "@/pages/Authentication/type"
+import type {AuthValues, LoginValues, RegisterValues} from "@/pages/auth/type"
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
 import {loginUser, registerUser} from "@/store/Authentication/authSlice.ts";
 import {toast} from "react-toastify";
@@ -115,11 +115,11 @@ export default function Authentication() {
             const result = await dispatch(loginUser(submittingValues))
 
             if (loginUser.fulfilled.match(result)) {
-                toast.success('🎉 Login successful!');
+                toast.success('Login successful!');
                 // Redirect if needed, e.g., navigate("/login")
             } else if (loginUser.rejected.match(result)) {
                 console.log(result.payload)
-                toast.error(`❌ Login failed: ${result.payload}`);
+                toast.error(`Login failed: ${result.payload}`);
             }
         }
 
@@ -285,7 +285,7 @@ export default function Authentication() {
                                     <div className="flex justify-between">
                                         <label htmlFor="password" className={labelStyle}>Password</label>
                                         {!isRegister &&
-                                            <Link to="/forgot-password" className={cn(labelStyle, "duration-200 hover:text-white")}>Forgot password?</Link>}
+                                            <Link to="/auth/password-reset" className={cn(labelStyle, "duration-200 hover:text-white")}>Forgot password?</Link>}
                                     </div>
                                     <Field
                                         name="password"
