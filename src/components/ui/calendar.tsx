@@ -83,7 +83,6 @@ function Calendar({
 
     const _monthsClassName = cn("relative flex justify-center", props.monthsClassName)
     const _monthCaptionClassName = cn(
-        // "relative mx-10 flex h-7 items-center justify-center",
         "relative mx-10 flex h-7 items-center justify-center",
         props.monthCaptionClassName
     )
@@ -129,7 +128,7 @@ function Calendar({
         props.dayButtonClassName
     )
     const buttonRangeClassName =
-        "bg-transparent [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground"
+        "bg-transparent [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground [&>button]:cursor-pointer"
     const _rangeStartClassName = cn(
         buttonRangeClassName,
         "day-range-start rounded-s-md",
@@ -141,15 +140,15 @@ function Calendar({
         props.rangeEndClassName
     )
     const _rangeMiddleClassName = cn(
-        "bg-accent !text-foreground [&>button]:bg-transparent [&>button]:!text-foreground [&>button]:hover:bg-transparent [&>button]:hover:!text-foreground",
+        "bg-accent !text-foreground [&>button]:bg-transparent [&>button]:!text-foreground [&>button]:hover:bg-transparent [&>button]:hover:!text-foreground [&>button]:cursor-pointer",
         props.rangeMiddleClassName
     )
     const _selectedClassName = cn(
-        "[&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground",
+        "[&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground [&>button]:cursor-pointer",
         props.selectedClassName
     )
     const _todayClassName = cn(
-        "[&>button]:bg-accent [&>button]:text-accent-foreground",
+        "[&>button]:bg-accent [&>button]:text-accent-foreground [&>button]:cursor-pointer",
         props.todayClassName
     )
     const _outsideClassName = cn(
@@ -339,7 +338,7 @@ function Nav({
         onNextClick?.(nextMonth)
     }, [goToMonth, nextMonth])
     return (
-        <nav className={cn("flex items-center hover:bg-transparent", className)}>
+        <nav className={cn("flex items-center [&>button]:cursor-pointer", className)}>
             {/*Previous button*/}
             <Button
                 variant="outline"
@@ -439,7 +438,7 @@ function MonthGrid({
         )
     }
     return (
-        <table className={cn(className)} {...props}>
+        <table className={cn(className, "")} {...props}>
             {children}
         </table>
     )

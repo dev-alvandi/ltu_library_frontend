@@ -72,6 +72,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
+            localStorage.removeItem("jwt");
             state.user = null;
             state.token = null;
         },
@@ -81,24 +82,23 @@ const authSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
                 state.user = action.payload.user;
                 state.token = action.payload.token;
+                localStorage.setItem("token", action.payload.token);
                 state.status = 'succeeded';
                 state.error = null;
+                console.log(action.payload)
             })
             .addCase(loginUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
                 state.user = action.payload.user;
                 state.token = action.payload.token;
+                localStorage.setItem("token", action.payload.token);
                 state.status = 'succeeded';
                 state.error = null;
             })
-            .addCase(requestResetPassword.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
-                state.user = action.payload.user;
-                state.token = action.payload.token;
+            .addCase(requestResetPassword.fulfilled, (state) => {
                 state.status = 'succeeded';
                 state.error = null;
             })
-             .addCase(resetPassword.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
-                state.user = action.payload.user;
-                state.token = action.payload.token;
+             .addCase(resetPassword.fulfilled, (state) => {
                 state.status = 'succeeded';
                 state.error = null;
             })

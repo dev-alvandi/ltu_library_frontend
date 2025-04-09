@@ -23,11 +23,6 @@ const passwordResetSchemaZod = z.object({
     }
 });
 
-const fieldStyle = "border-[#27272a] rounded-[4px] text-white !px-2";
-const labelStyle = "text-gray-500";
-const inputStyle = "flex flex-col gap-2";
-
-
 const passwordResetValues = {
     password: "",
     confirmPassword: "",
@@ -58,10 +53,10 @@ const PasswordReset = () => {
     return (
         <div className="min-h-screen flex justify-center items-center bg-[#030712]">
             <Card className="max-w-md bg-transparent rounded-[4px] border-[#27272a]">
-                <CardContent className="!md:p-8 !p-3">
+                <CardContent className="md:p-8 p-3">
                     <div>
                         <h2 className="text-4xl font-extrabold text-(--color-text-white)
-                            libre-baskerville !py-3">
+                            libre-baskerville py-3">
                             Reset Your Password
                         </h2>
                         <p className="text-gray-400">Submit your email and check your inbox for further
@@ -74,14 +69,14 @@ const PasswordReset = () => {
                         onSubmit={handleSubmit}
                     >
                         {() => (
-                            <Form className="flex flex-col gap-4 !pt-4">
-                                <div className={inputStyle}>
-                                    <label htmlFor="password" className={labelStyle}>Password</label>
+                            <Form className="flex flex-col gap-4 pt-4">
+                                <div className="auth-input-style">
+                                    <label htmlFor="password" className="auth-label-style">Password</label>
                                     <Field
                                         name="password"
                                         as={Input}
                                         type="password"
-                                        className={fieldStyle}
+                                        className="auth-field-style"
                                     />
                                     <ErrorMessage
                                         name="password"
@@ -89,14 +84,14 @@ const PasswordReset = () => {
                                         className="text-red-500 text-sm"
                                     />
                                 </div>
-                                <div className={inputStyle}>
-                                    <label htmlFor="confirmPassword" className={labelStyle}>Confirm
+                                <div className="auth-input-style">
+                                    <label htmlFor="confirmPassword" className="auth-label-style">Confirm
                                         Password</label>
                                     <Field
                                         name="confirmPassword"
                                         as={Input}
                                         type="password"
-                                        className={fieldStyle}
+                                        className="auth-field-style"
                                     />
                                     <ErrorMessage
                                         name="confirmPassword"
@@ -106,8 +101,8 @@ const PasswordReset = () => {
                                 </div>
                                 <Button type="submit"
                                         disabled={status === 'loading'}
-                                        className="cursor-pointer bg-(--color-blue-theme) hover:bg-(--color-blue-theme)/50">
-                                    Send the link
+                                        className="cursor-pointer custom-btn">
+                                    Reset password
                                 </Button>
                             </Form>
                         )}

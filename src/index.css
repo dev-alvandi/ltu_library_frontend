@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
-@import "tw-animate-css";
 
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -33,7 +33,6 @@
 .merriweather {
     font-family: 'Merriweather', serif;
 }
-
 
 :root {
     --radius: 0.625rem;
@@ -144,10 +143,15 @@
 
 @layer base {
     * {
-        @apply border-border outline-ring/50;
+        @apply box-border m-0 p-0 border-border outline-ring/50;
     }
 
     body {
         @apply bg-background text-foreground;
     }
+}
+
+body {
+    background-color: #030712;
+    color: var(--color-text-white);
 }

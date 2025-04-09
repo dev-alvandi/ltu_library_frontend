@@ -17,10 +17,6 @@ const requestPasswordResetValues = {
     email: ""
 }
 
-const fieldStyle = "border-[#27272a] rounded-[4px] text-white !px-2";
-const labelStyle = "text-gray-500";
-const inputStyle = "flex flex-col gap-2";
-
 const RequestPasswordReset = () => {
 
     const dispatch = useAppDispatch();
@@ -32,11 +28,11 @@ const RequestPasswordReset = () => {
         const result = await dispatch(requestResetPassword(values));
 
         if (requestResetPassword.fulfilled.match(result)) {
-            toast.success('Registration successful!');
+            toast.success('Email sent if the email belongs to a registered user!');
             // Redirect if needed, e.g., navigate("/login")
         } else if (requestResetPassword.rejected.match(result)) {
             console.log(result.payload)
-            toast.error(`Registration failed: ${result.payload}`);
+            toast.error(`Request failed: ${result.payload}`);
         }
     }
 
@@ -59,13 +55,13 @@ const RequestPasswordReset = () => {
                     >
                         {() => (
                             <Form className="flex flex-col gap-4 !pt-4">
-                                <div className={inputStyle}>
-                                    <label htmlFor="email" className={labelStyle}>Email</label>
+                                <div className="auth-input-style">
+                                    <label htmlFor="email" className="auth-label-style">Email</label>
                                     <Field
                                         name="email"
                                         as={Input}
                                         type="text"
-                                        className={fieldStyle}
+                                        className="auth-field-style"
                                     />
                                     <ErrorMessage
                                         name="email"
@@ -75,7 +71,7 @@ const RequestPasswordReset = () => {
                                 </div>
                                 <Button type="submit"
                                         disabled={status === 'loading'}
-                                        className="cursor-pointer bg-(--color-blue-theme) hover:bg-(--color-blue-theme)/50">
+                                        className="cursor-pointer custom-btn">
                                     Send the link
                                 </Button>
                             </Form>

@@ -6,7 +6,7 @@ import {toFormikValidationSchema} from "zod-formik-adapter";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Card, CardContent} from "@/components/ui/card";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {Calendar} from "@/components/ui/calendar.tsx";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {CalendarIcon} from "lucide-react";
@@ -16,6 +16,7 @@ import type {AuthValues, LoginValues, RegisterValues} from "@/pages/auth/type"
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
 import {loginUser, registerUser} from "@/store/Authentication/authSlice.ts";
 import {toast} from "react-toastify";
+import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 
 const loginSchemaZod = z.object({
     email: z.string().email("Invalid email"),
@@ -65,16 +66,14 @@ const registerSchemaZod = z.object({
         }
     });
 
-const fieldStyle = "border-[#27272a] rounded-[4px] text-white !px-2";
-const labelStyle = "text-gray-500";
-const inputStyle = "flex flex-col gap-2";
-
 export default function Authentication() {
     const dispatch = useAppDispatch();
     const { status } = useAppSelector((state) => state.auth);
 
     const [isRegister, setIsRegister] = useState(false);
     const [date, setDate] = useState<Date>();
+
+    const navigate = useNavigate();
 
     const registerInitialValues = {
         firstName: "",
@@ -104,6 +103,7 @@ export default function Authentication() {
             if (registerUser.fulfilled.match(result)) {
                 toast.success('Registration successful!');
                 // Redirect if needed, e.g., navigate("/login")
+                navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
             } else if (registerUser.rejected.match(result)) {
                 console.log(result.payload)
                 toast.error(`Registration failed: ${result.payload}`);
@@ -116,6 +116,7 @@ export default function Authentication() {
 
             if (loginUser.fulfilled.match(result)) {
                 toast.success('Login successful!');
+                navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
                 // Redirect if needed, e.g., navigate("/login")
             } else if (loginUser.rejected.match(result)) {
                 console.log(result.payload)
@@ -129,7 +130,7 @@ export default function Authentication() {
     return (
         <div className="min-h-screen flex justify-center items-center bg-[#030712]">
             <Card className="max-w-md bg-transparent rounded-[4px] border-[#27272a]">
-                <CardContent className="!md:p-8 !p-3">
+                <CardContent className="md:p-8 p-3">
                     <div className="flex flex-col items-center gap-3">
                         <img className="w-1/3" src="/logo-white-background-transparent.png" alt="LTU"/>
                         <h2 className="text-4xl font-extrabold text-(--color-text-white)
@@ -144,17 +145,17 @@ export default function Authentication() {
                         onSubmit={handleSubmit}
                     >
                         {() => (
-                            <Form className="flex flex-col gap-4 !pt-4">
+                            <Form className="flex flex-col gap-4 pt-4">
                                 {isRegister && (
                                     <>
                                         <div className="flex flex-col gap-2 md:flex-row md:gap-4">
-                                            <div className={inputStyle}>
-                                                <label htmlFor="firstName" className={labelStyle}>First name</label>
+                                            <div className="auth-input-style">
+                                                <label htmlFor="firstName" className="auth-label-style">First name</label>
                                                 <Field
                                                     name="firstName"
                                                     as={Input}
                                                     type="text"
-                                                    className={fieldStyle}
+                                                    className="auth-field-style"
                                                 />
                                                 <ErrorMessage
                                                     name="firstName"
@@ -162,13 +163,13 @@ export default function Authentication() {
                                                     className="text-red-500 text-sm"
                                                 />
                                             </div>
-                                            <div className={inputStyle}>
-                                                <label htmlFor="lastName" className={labelStyle}>Last name</label>
+                                            <div className="auth-input-style">
+                                                <label htmlFor="lastName" className="auth-label-style">Last name</label>
                                                 <Field
                                                     name="lastName"
                                                     as={Input}
                                                     type="text"
-                                                    className={fieldStyle}
+                                                    className="auth-field-style"
                                                 />
                                                 <ErrorMessage
                                                     name="lastName"
@@ -177,8 +178,8 @@ export default function Authentication() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className={inputStyle}>
-                                            <label htmlFor="dob" className={labelStyle}>Date of birth</label>
+                                        <div className="auth-input-style">
+                                            <label htmlFor="dob" className="auth-label-style">Date of birth</label>
                                             <div className="flex justify-center items-center">
                                                 <Popover>
                                                     <PopoverTrigger asChild>
@@ -193,7 +194,7 @@ export default function Authentication() {
                                                             {date ? format(date, "PPP") : <span>Pick a date</span>}
                                                         </Button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-full !p-2 bg-[#111] border-[#2c2c2c]">
+                                                    <PopoverContent className="w-full p-0 bg-[#111] border-[#2c2c2c]">
                                                         <Calendar
                                                             mode="single"
                                                             selected={date}
@@ -206,13 +207,13 @@ export default function Authentication() {
                                                 </Popover>
                                             </div>
                                         </div>
-                                        <div className={inputStyle}>
-                                            <label htmlFor="phoneNumber" className={labelStyle}>Phone number</label>
+                                        <div className="auth-input-style">
+                                            <label htmlFor="phoneNumber" className="auth-label-style">Phone number</label>
                                             <Field
                                                 name="phoneNumber"
                                                 as={Input}
                                                 type="text"
-                                                className={fieldStyle}
+                                                className="auth-field-style"
                                             />
                                             <ErrorMessage
                                                 name="phoneNumber"
@@ -222,13 +223,13 @@ export default function Authentication() {
                                         </div>
                                         <div className="flex flex-col gap-2 md:flex-row md:gap-4">
 
-                                            <div className={inputStyle}>
-                                                <label htmlFor="city" className={labelStyle}>City</label>
+                                            <div className="auth-input-style">
+                                                <label htmlFor="city" className="auth-label-style">City</label>
                                                 <Field
                                                     name="city"
                                                     as={Input}
                                                     type="text"
-                                                    className={fieldStyle}
+                                                    className="auth-field-style"
                                                 />
                                                 <ErrorMessage
                                                     name="city"
@@ -236,13 +237,13 @@ export default function Authentication() {
                                                     className="text-red-500 text-sm"
                                                 />
                                             </div>
-                                            <div className={inputStyle}>
-                                                <label htmlFor="street" className={labelStyle}>Street</label>
+                                            <div className="auth-input-style">
+                                                <label htmlFor="street" className="auth-label-style">Street</label>
                                                 <Field
                                                     name="street"
                                                     as={Input}
                                                     type="text"
-                                                    className={fieldStyle}
+                                                    className="auth-field-style"
                                                 />
                                                 <ErrorMessage
                                                     name="street"
@@ -250,13 +251,13 @@ export default function Authentication() {
                                                     className="text-red-500 text-sm"
                                                 />
                                             </div>
-                                            <div className={inputStyle}>
-                                                <label htmlFor="postalCode" className={labelStyle}>Postal code</label>
+                                            <div className="auth-input-style">
+                                                <label htmlFor="postalCode" className="auth-label-style">Postal code</label>
                                                 <Field
                                                     name="postalCode"
                                                     as={Input}
                                                     type="text"
-                                                    className={fieldStyle}
+                                                    className="auth-field-style"
                                                 />
                                                 <ErrorMessage
                                                     name="postalCode"
@@ -267,13 +268,13 @@ export default function Authentication() {
                                         </div>
                                     </>
                                 )}
-                                <div className={inputStyle}>
-                                    <label htmlFor="email" className={labelStyle}>Email</label>
+                                <div className="auth-input-style">
+                                    <label htmlFor="email" className="auth-label-style">Email</label>
                                     <Field
                                         name="email"
                                         as={Input}
                                         type="email"
-                                        className={fieldStyle}
+                                        className="auth-field-style"
                                     />
                                     <ErrorMessage
                                         name="email"
@@ -281,17 +282,17 @@ export default function Authentication() {
                                         className="text-red-500 text-sm"
                                     />
                                 </div>
-                                <div className={inputStyle}>
+                                <div className="auth-input-style">
                                     <div className="flex justify-between">
-                                        <label htmlFor="password" className={labelStyle}>Password</label>
+                                        <label htmlFor="password" className="auth-label-style">Password</label>
                                         {!isRegister &&
-                                            <Link to="/auth/password-reset" className={cn(labelStyle, "duration-200 hover:text-white")}>Forgot password?</Link>}
+                                            <Link to="/auth/password-reset" className="auth-label-style duration-200 hover:!text-white">Forgot password?</Link>}
                                     </div>
                                     <Field
                                         name="password"
                                         as={Input}
                                         type="password"
-                                        className={fieldStyle}
+                                        className="auth-field-style"
                                     />
                                     <ErrorMessage
                                         name="password"
@@ -300,14 +301,14 @@ export default function Authentication() {
                                     />
                                 </div>
                                 {isRegister && (
-                                    <div className={inputStyle}>
-                                        <label htmlFor="confirmPassword" className={labelStyle}>Confirm
+                                    <div className="auth-input-style">
+                                        <label htmlFor="confirmPassword" className="auth-label-style">Confirm
                                             Password</label>
                                         <Field
                                             name="confirmPassword"
                                             as={Input}
                                             type="password"
-                                            className={fieldStyle}
+                                            className="auth-field-style"
                                         />
                                         <ErrorMessage
                                             name="confirmPassword"
@@ -318,7 +319,7 @@ export default function Authentication() {
                                 )}
                                 <Button type="submit"
                                         disabled={status === 'loading'}
-                                        className="cursor-pointer bg-(--color-blue-theme) hover:bg-(--color-blue-theme)/50">
+                                        className="cursor-pointer custom-btn">
                                     {isRegister ? "Create Account" : "Login"}
                                 </Button>
                                 <button

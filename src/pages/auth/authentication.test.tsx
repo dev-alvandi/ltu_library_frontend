@@ -1,5 +1,5 @@
 import {fireEvent, render, screen} from '@testing-library/react'
-import Authentication from './Authentication'
+import Authentication from './authentication.tsx'
 import {Provider} from 'react-redux'
 import {store} from '@/store/store'
 import {describe, expect, test} from "vitest";

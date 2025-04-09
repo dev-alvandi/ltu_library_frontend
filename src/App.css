@@ -1,5 +1,27 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.custom-btn {
+    background-color: var(--color-blue-theme);
+
+}
+
+.custom-btn:hover {
+    @media (hover: hover) {
+        background-color: color-mix(in oklab, var(--color-blue-theme) 80%, transparent);
+    }
+}
+
+.auth-field-style {
+    border: 1px solid #27272a;
+    border-radius: 4px;
+    color: white;
+    padding: 0 0.5rem;
+}
+
+.auth-label-style {
+    color: oklch(55.1% 0.027 264.364)
+}
+
+.auth-input-style {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
