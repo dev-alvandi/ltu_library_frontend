@@ -1,4 +1,4 @@
-// User
+// User DTO
 export type User = {
     userId: number;
     firstName: string;
@@ -11,6 +11,25 @@ export type User = {
     email: string;
     password: string;
     userType: 0 | 1 | 2 | 3 | 4 | 5; // admin, librarian, student, researcher, university staff, public
+};
+
+// Book DTO
+export type ReceivingBook = {
+    bookId: string;
+    title: string;
+    author: string;
+    publisher: string;
+    publishedYear: number;
+    isbn: string;
+    language: string;
+    imageUrl: string;
+    bookType: 'COURSE_LITERATURE' | 'PUBLIC'; // If there are other types, replace `string` with them
+    numberOfCopies: number;
+    numberOfAvailableToBorrowCopies: number;
+    bookCategory: {
+        bookCategoryId: string;
+        subject: string;
+    };
 };
 
 // Loan
@@ -27,19 +46,6 @@ export type ItemLoan = {
     bookCopyId?: number | null;
     filmCopyId?: number | null;
     dueDate: string;
-};
-
-// Book
-export type Book = {
-    bookId: number;
-    title: string;
-    isbn: string;
-    author: string;
-    publisher: string;
-    publishingYear: number;
-    bookType: 0 | 1; // 0 = Course literature, 1 = Public
-    imageUrl: string;
-    bookCategoryId: number;
 };
 
 // BookCopy

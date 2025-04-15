@@ -14,7 +14,7 @@ import {format} from "date-fns";
 import {cn} from "@/lib/utils";
 import type {AuthValues, LoginValues, RegisterValues} from "@/pages/auth/type"
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {loginUser, registerUser} from "@/store/Authentication/authSlice.ts";
+import {loginUser, registerUser} from "@/store/authSlice.ts";
 import {toast} from "react-toastify";
 import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 
@@ -68,7 +68,8 @@ const registerSchemaZod = z.object({
 
 export default function Authentication() {
     const dispatch = useAppDispatch();
-    const { status } = useAppSelector((state) => state.auth);
+    const { loginStatus, registerStatus } = useAppSelector((state) => state.auth);
+
 
     const [isRegister, setIsRegister] = useState(false);
     const [date, setDate] = useState<Date>();
@@ -103,7 +104,8 @@ export default function Authentication() {
             if (registerUser.fulfilled.match(result)) {
                 toast.success('Registration successful!');
                 // Redirect if needed, e.g., navigate("/login")
-                navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
+                // navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
+                setIsRegister(false)
             } else if (registerUser.rejected.match(result)) {
                 console.log(result.payload)
                 toast.error(`Registration failed: ${result.payload}`);
@@ -318,7 +320,7 @@ export default function Authentication() {
                                     </div>
                                 )}
                                 <Button type="submit"
-                                        disabled={status === 'loading'}
+                                        disabled={isRegister ? registerStatus === 'loading' : loginStatus === 'loading'}
                                         className="cursor-pointer custom-btn">
                                     {isRegister ? "Create Account" : "Login"}
                                 </Button>

@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './Authentication/authSlice';
+import authReducer from '@/store/authSlice.ts';
+import userReducer from '@/store/userSlice.ts';
+import bookReducer from '@/store/bookSlice.ts';
 import {useDispatch, useSelector} from "react-redux";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
+        user: userReducer,
+        book: bookReducer
     },
 });
 

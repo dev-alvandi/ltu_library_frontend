@@ -6,7 +6,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {resetPassword} from "@/store/Authentication/authSlice.ts";
+import {resetPassword} from "@/store/authSlice.ts";
 import {toast} from "react-toastify";
 import {useNavigate, useParams} from "react-router";
 
@@ -30,7 +30,7 @@ const passwordResetValues = {
 
 const PasswordReset = () => {
     const dispatch = useAppDispatch();
-    const {status} = useAppSelector((state) => state.auth);
+    const {resetStatus} = useAppSelector((state) => state.auth);
 
     const { token } = useParams();
     const navigate = useNavigate();
@@ -100,7 +100,7 @@ const PasswordReset = () => {
                                     />
                                 </div>
                                 <Button type="submit"
-                                        disabled={status === 'loading'}
+                                        disabled={resetStatus === 'loading'}
                                         className="cursor-pointer custom-btn">
                                     Reset password
                                 </Button>

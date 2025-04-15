@@ -1,17 +1,26 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import type { AuthState, AuthResponse } from './type';
 import {AuthValues} from "@/pages/auth/type.ts";
 import {API_BASE_URL} from "@/config/api.ts";
 import {PasswordResetValues, RequestPasswordResetValues} from "@/pages/auth/password-reset/type.ts";
+import {User} from "@/types/entitiesType.ts";
+import {getErrorMessage} from "@/utils/getErrorMessage.ts";
 
-// Helper to extract a typed error message from Axios
-const getErrorMessage = (error: unknown): string => {
-    if (axios.isAxiosError(error)) {
-        return error.response?.data?.message || error.message;
-    }
-    return 'An unknown error occurred';
-};
+export interface AuthResponse {
+    user: User;
+    token: string;
+}
+
+export interface AuthState {
+    user: User | null;
+    token: string | null;
+    loginStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    registerStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    resetStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+
+    error: string | null;
+}
+
 
 export const registerUser = createAsyncThunk<AuthResponse, AuthValues, { rejectValue: string }>(
     'auth/registerUser',
@@ -63,7 +72,9 @@ export const resetPassword = createAsyncThunk<AuthResponse, PasswordResetValues,
 const initialState: AuthState = {
     user: null,
     token: null,
-    status: 'idle',
+    loginStatus: 'idle',
+    registerStatus: 'idle',
+    resetStatus: 'idle',
     error: null,
 };
 
@@ -72,7 +83,8 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            localStorage.removeItem("jwt");
+            console.log("LOGOUT")
+            localStorage.removeItem("token");
             state.user = null;
             state.token = null;
         },
@@ -82,8 +94,7 @@ const authSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
                 state.user = action.payload.user;
                 state.token = action.payload.token;
-                localStorage.setItem("token", action.payload.token);
-                state.status = 'succeeded';
+                state.registerStatus = 'succeeded';
                 state.error = null;
                 console.log(action.payload)
             })
@@ -91,40 +102,49 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
                 state.token = action.payload.token;
                 localStorage.setItem("token", action.payload.token);
-                state.status = 'succeeded';
+                state.loginStatus = 'succeeded';
                 state.error = null;
             })
             .addCase(requestResetPassword.fulfilled, (state) => {
-                state.status = 'succeeded';
+                state.resetStatus = 'succeeded';
                 state.error = null;
             })
              .addCase(resetPassword.fulfilled, (state) => {
-                state.status = 'succeeded';
-                state.error = null;
+                 state.resetStatus = 'succeeded';
+                 state.error = null;
             })
             .addCase(registerUser.rejected, (state, action) => {
-                state.status = 'failed';
+                state.registerStatus = 'failed';
                 state.error = action.payload || 'Registration failed';
             })
             .addCase(loginUser.rejected, (state, action) => {
-                state.status = 'failed';
+                state.loginStatus = 'failed';
                 state.error = action.payload || 'Login failed';
             })
             .addCase(requestResetPassword.rejected, (state, action) => {
-                state.status = 'failed';
+                state.resetStatus = 'failed';
                 state.error = action.payload || 'Password reset mail failed';
             })
             .addCase(resetPassword.rejected, (state, action) => {
-                state.status = 'failed';
+                state.resetStatus = 'failed';
                 state.error = action.payload || 'Password reset failed';
             })
-            .addMatcher(
-                (action) => action.type.endsWith('/pending'),
-                (state) => {
-                    state.status = 'loading';
-                    state.error = null;
-                }
-            );
+            .addCase(registerUser.pending, (state) => {
+                state.registerStatus = 'loading';
+                state.error = null;
+            })
+            .addCase(loginUser.pending, (state) => {
+                state.loginStatus = 'loading';
+                state.error = null;
+            })
+            .addCase(requestResetPassword.pending, (state) => {
+                state.resetStatus = 'loading';
+                state.error = null;
+            })
+            .addCase(resetPassword.pending, (state) => {
+                state.resetStatus = 'loading';
+                state.error = null;
+            })
     },
 });
 

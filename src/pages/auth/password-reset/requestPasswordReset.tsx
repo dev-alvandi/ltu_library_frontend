@@ -6,7 +6,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {requestResetPassword} from "@/store/Authentication/authSlice.ts";
+import {requestResetPassword} from "@/store/authSlice.ts";
 import {toast} from "react-toastify";
 
 const requestPasswordResetSchemaZod = z.object({
@@ -20,7 +20,7 @@ const requestPasswordResetValues = {
 const RequestPasswordReset = () => {
 
     const dispatch = useAppDispatch();
-    const { status } = useAppSelector((state) => state.auth);
+    const { resetStatus } = useAppSelector((state) => state.auth);
 
     const handleSubmit = async (values: RequestPasswordResetValues) => {
         console.log(values)
@@ -70,7 +70,7 @@ const RequestPasswordReset = () => {
                                     />
                                 </div>
                                 <Button type="submit"
-                                        disabled={status === 'loading'}
+                                        disabled={resetStatus === 'loading'}
                                         className="cursor-pointer custom-btn">
                                     Send the link
                                 </Button>
