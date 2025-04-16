@@ -1,21 +1,16 @@
 import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { MultiSelect } from "@/components/ui/multi-select";
-import { FILTERS_TYPE } from "./type";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { MultiSelect } from "@/components/ui/multi-select.tsx";
+import { FILTERS_TYPE } from "./type.ts";
 import { ALL_POSSIBLE_RESOURCES } from "@/constants.ts";
-import {useCallback, useEffect, useMemo} from "react";
-import {useSearchParams} from "react-router";
-import {normalizeFiltersFromParams} from "@/utils/normalizeFilters.ts";
-import {useParsedSearchParams} from "@/hooks/use-parsedSearch-params.tsx";
-
-const availabilities = ["Available to Borrow", "Reserved Only"] as const;
+import {useCallback} from "react";
 
 const filterSchema = z.object({
-    availabilities: z.array(z.enum(availabilities)),
+    isAvailable: z.boolean(),
     categories: z.record(z.string(), z.number()),
     languages: z.record(z.string(), z.number()),
     minYear: z.number().min(1000).max(new Date().getFullYear()),
@@ -31,68 +26,20 @@ interface Props {
     resourceName: string;
 }
 
-const FilterGrid = ({
+const FilterBookGrid = ({
                         allFilters,
                         setUserFilters,
                         resourceName,
                     }: Props) => {
-    // const [, setSearchParams] = useSearchParams({})
 
     const formik = useFormik<FilterFormType>({
         initialValues: allFilters,
         enableReinitialize: true,
         validationSchema: toFormikValidationSchema(filterSchema),
         onSubmit: (values) => {
-            // setSearchParams({});
-            //
-            // const params = new URLSearchParams();
-            //
-            // console.log("Formik values: ", formik.values);
-            //
-            //
-            // params.set("availabilities", formik.values.availabilities.join(','))
-            // params.set("minYear", formik.values.minYear.toString())
-            // params.set("maxYear", formik.values.maxYear.toString())
-            // params.set("categories", Object.keys(formik.values.categories).join(','))
-            // params.set("languages", Object.keys(formik.values.languages).join(','))
-            //
-            // console.log("Params: ", params);
-            //
-            // setSearchParams(params);
-
             setUserFilters(values);
         },
     });
-
-    // const rawParams = useParsedSearchParams([
-    //     "availabilities",
-    //     "languages",
-    //     "categories",
-    //     "minYear",
-    //     "maxYear",
-    // ]);
-
-
-    // 🔧 Normalize params to FILTERS_TYPE
-    // const normalizedFilters = useMemo(() => {
-    //     return normalizeFiltersFromParams(rawParams);
-    // }, [rawParams]);
-
-    // useEffect(() => {
-        // formik.setValues(prev => ({
-        //     ...prev,
-        //     minYear: normalizedFilters.minYear,
-        //     maxYear: normalizedFilters.maxYear,
-        // }));
-    // }, []);
-
-    const toggleArrayValue = (field: keyof FilterFormType, value: string) => {
-        const array = formik.values[field] as string[];
-        formik.setFieldValue(
-            field,
-            array.includes(value) ? array.filter((v) => v !== value) : [...array, value]
-        );
-    };
 
     const handleCategoryChange = useCallback((val: string[]) => {
         const updated = val.reduce((acc, key) => {
@@ -121,31 +68,26 @@ const FilterGrid = ({
 
     return (
         <form onSubmit={formik.handleSubmit} className="h-full relative flex flex-col px-4 gap-5">
-            <h2 className="text-lg font-semibold">Filters</h2>
+            <h2 className="text-lg font-semibold text-black lg:text-white">Filters</h2>
 
             {/* Availabilities */}
             {resourceName !== ALL_POSSIBLE_RESOURCES["magazines"] && (
-                <div>
-                    <p className="font-medium mb-1">Availabilities</p>
-                    {availabilities.map((availability) => (
-                        <label key={availability} className="flex items-center gap-2">
-                            <Checkbox
-                                checked={formik.values.availabilities.includes(availability)}
-                                onCheckedChange={() => toggleArrayValue("availabilities", availability)}
-                            />
-                            {availability}
-                        </label>
-                    ))}
-                </div>
+                <label className="flex items-center gap-2 text-black lg:text-white">
+                    <Checkbox
+                        checked={formik.values.isAvailable}
+                        onCheckedChange={(checked) => formik.setFieldValue("isAvailable", checked)}
+                    />
+                    Available to Borrow
+                </label>
             )}
 
             {/* Year Range */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 text-black lg:text-white">
                 <Input
                     type="number"
                     name="minYear"
                     placeholder="From Year"
-                    // defaultValue={normalizedFilters.minYear}
+                    value={formik.values.minYear}
                     onChange={formik.handleChange}
                     min={formik.values.minYear}
                     max={formik.values.maxYear}
@@ -154,7 +96,7 @@ const FilterGrid = ({
                     type="number"
                     name="maxYear"
                     placeholder="To Year"
-                    // defaultValue={normalizedFilters.maxYear}
+                    value={formik.values.maxYear}
                     onChange={formik.handleChange}
                     min={formik.values.minYear}
                     max={formik.values.maxYear}
@@ -194,4 +136,4 @@ const FilterGrid = ({
     );
 };
 
-export default FilterGrid;
+export default FilterBookGrid;

@@ -1,5 +1,3 @@
-import { useMemo, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import {
     Pagination,
     PaginationContent,
@@ -7,25 +5,22 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious
-} from "@/components/ui/pagination";
-import { PaginationBookResponse } from "@/store/bookSlice.ts";
+} from "@/components/ui/pagination.tsx";
+import {PaginationBookResponse} from "@/store/bookSlice.ts";
+import BookResource from "@/pages/search-resources/books/bookResource.tsx";
 
 interface Props {
     results: PaginationBookResponse | null;
     resourceName: string;
+    currentPage: number,
+    setCurrentPage: (page: number) => void
 }
 
-const ResourceGrid = ({ results, resourceName }: Props) => {
-    const [currentPage, setCurrentPage] = useState(1);
+const BookResourceGrid = ({results, resourceName, currentPage, setCurrentPage}: Props) => {
     const maxVisiblePages = 5; // Display range: 2 before + current + 2 after
 
     const totalPages = results?.totalPages || 1;
 
-    const paginatedResults = useMemo(() => {
-        if (!results || results.content.length <= 0 || results.numberOfElements === 0) return;
-        const start = (currentPage - 1) * results.numberOfElements;
-        return results.content.slice(start, start + results.numberOfElements);
-    }, [currentPage, results]);
 
     const handlePageChange = (page: number) => {
         if (results && page >= 1 && page <= totalPages) {
@@ -54,7 +49,6 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
         return range;
     };
 
-    // console.log(results)
 
     if (results && results?.content.length <= 0) {
         return (
@@ -67,14 +61,12 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
     }
 
     return (
-        <div className="space-y-4">
-            {paginatedResults && paginatedResults.map((item, index) => (
-                <Card key={index}>
-                    <CardContent className="p-4 text-sm font-mono whitespace-pre-wrap">
-                        {JSON.stringify(item, null, 2)}
-                    </CardContent>
-                </Card>
-            ))}
+        <div className="space-y-4 py-4 p-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {results?.content.map((item, index) => (
+                    <BookResource key={index} book={item}/>
+                ))}
+            </div>
 
             <Pagination>
                 <PaginationContent>
@@ -82,7 +74,7 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
                     <PaginationItem>
                         <PaginationPrevious
                             onClick={() => handlePageChange(currentPage - 1)}
-                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                         />
                     </PaginationItem>
 
@@ -90,7 +82,7 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
                     {currentPage > 3 && (
                         <>
                             <PaginationItem>
-                                <PaginationLink onClick={() => handlePageChange(1)}>
+                                <PaginationLink className="cursor-pointer" onClick={() => handlePageChange(1)}>
                                     1
                                 </PaginationLink>
                             </PaginationItem>
@@ -102,6 +94,7 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
                     {getPageRange().map((page) => (
                         <PaginationItem key={page}>
                             <PaginationLink
+                                className="cursor-pointer"
                                 onClick={() => handlePageChange(page)}
                                 isActive={currentPage === page}
                             >
@@ -115,7 +108,7 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
                         <>
                             {currentPage < totalPages - 3 && <span className="px-2 text-muted-foreground">...</span>}
                             <PaginationItem>
-                                <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                                <PaginationLink className="cursor-pointer" onClick={() => handlePageChange(totalPages)}>
                                     {totalPages}
                                 </PaginationLink>
                             </PaginationItem>
@@ -126,7 +119,7 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
                     <PaginationItem>
                         <PaginationNext
                             onClick={() => handlePageChange(currentPage + 1)}
-                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                         />
                     </PaginationItem>
                 </PaginationContent>
@@ -135,4 +128,4 @@ const ResourceGrid = ({ results, resourceName }: Props) => {
     );
 };
 
-export default ResourceGrid;
+export default BookResourceGrid;

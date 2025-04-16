@@ -1,15 +1,29 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {API_BASE_URL} from "@/config/api.ts";
 import { getErrorMessage } from "@/utils/getErrorMessage.ts";
-import {FILTERS_TYPE} from "@/pages/search-resources/type.ts";
+import {FILTERS_TYPE} from "@/pages/search-resources/books/type.ts";
 import axios from "axios";
 import {ReceivingBook} from "@/types/entitiesType.ts";
+import {booksParamsSerializer} from "@/utils/booksParamsSerializer.ts";
 
 
 interface AllBooksFilters {
     languages: Record<string, number>,
     categories: Record<string, number>,
     publishedYearRange: { minYear: number, maxYear: number },
+}
+
+interface Suggestions {
+    title: string[];
+    isbn: string[];
+    author: string[];
+    publisher: string[];
+}
+
+
+interface SearchBooksArgs extends FILTERS_TYPE {
+    query: string;
+    page: number
 }
 
 export interface PaginationBookResponse {
@@ -40,6 +54,7 @@ export interface PaginationBookResponse {
     totalElements: number;
     totalPages: number;
 }
+
 
 const initialPaginationBookResponse = {
     content: [],
@@ -74,12 +89,14 @@ interface BookState {
     results: PaginationBookResponse | null;
     languages: Record<string, number>,
     categories: Record<string, number>,
-    availabilities: ("Available to Borrow" | "Reserved Only")[];
+    isAvailable: boolean;
     minPublishedYear: number;
     maxPublishedYear: number;
     status: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
+    suggestions: Suggestions
 }
+
 
 const currentYear = new Date().getFullYear();
 
@@ -87,24 +104,36 @@ const initialState: BookState = {
     results: initialPaginationBookResponse,
     languages: {},
     categories: {},
-    availabilities: ["Available to Borrow", "Reserved Only"],
+    isAvailable: true,
     minPublishedYear: 1000,
     maxPublishedYear: currentYear,
     status: "idle",
     error: null,
+    suggestions: {
+        title: [],
+        isbn: [],
+        author: [],
+        publisher: [],
+    },
+
 };
 
-export const getAllBooks = createAsyncThunk<PaginationBookResponse, void, { rejectValue: string }>(
+export const getAllBooks = createAsyncThunk<PaginationBookResponse, number, { rejectValue: string }>(
     "books/getAllBooks",
-    async (_, thunkAPI) => {
+    async (pageIndex = 0, thunkAPI) => {
         try {
-            const response = await axios.get<PaginationBookResponse>(`${API_BASE_URL}/resources/books`);
+            const response = await axios.get<PaginationBookResponse>(
+                `${API_BASE_URL}/resources/books`,
+                { params: { page: pageIndex } }
+            );
+
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(getErrorMessage(error));
         }
     }
 );
+
 
 export const filteredBooks = createAsyncThunk<PaginationBookResponse, FILTERS_TYPE, { rejectValue: string }>(
     "books/filteredBooks",
@@ -113,16 +142,8 @@ export const filteredBooks = createAsyncThunk<PaginationBookResponse, FILTERS_TY
             const response = await axios.get<PaginationBookResponse>(
                 `${API_BASE_URL}/resources/filtered-books`,
                 {
-                    params: filters, // ✅ the key fix
-                    paramsSerializer: (params) =>
-                        new URLSearchParams(
-                            Object.entries(params).flatMap(([key, value]) => {
-                                if (Array.isArray(value)) {
-                                    return value.map((v) => [key, v]);
-                                }
-                                return [[key, String(value)]];
-                            })
-                        ).toString(),
+                    params: filters,
+                    paramsSerializer: booksParamsSerializer
                 }
             );
 
@@ -138,10 +159,44 @@ export const allBooksFilters = createAsyncThunk<AllBooksFilters, void, { rejectV
     async (_, thunkAPI) => {
         try {
             const response = await axios.get<AllBooksFilters>(`${API_BASE_URL}/resources/books-filters`);
-
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(getErrorMessage(error));
+        }
+    }
+);
+
+export const fetchSuggestions = createAsyncThunk<Suggestions, string, { rejectValue: string }>(
+    "books/fetchSuggestions",
+    async (query, thunkAPI) => {
+        try {
+            // console.log(encodeURIComponent(query))
+            const response = await axios.get<Suggestions>(
+                `${API_BASE_URL}/resources/suggested-books?query=${encodeURIComponent(query)}`
+            );
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(getErrorMessage(error));
+        }
+    }
+);
+
+export const searchBooks = createAsyncThunk<PaginationBookResponse, SearchBooksArgs, { rejectValue: string }>(
+    "books/searchBooks",
+    async (args, thunkAPI) => {
+        try {
+            console.log("Args ", args)
+            const response = await axios.get<PaginationBookResponse>(
+                `${API_BASE_URL}/resources/searched-books`,
+                {
+                    params: args,
+                    paramsSerializer: booksParamsSerializer,
+                }
+            );
+            console.log(response.data)
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue("Search failed");
         }
     }
 );
@@ -179,7 +234,6 @@ const bookSlice = createSlice({
                 totalElements: action.payload.length,
                 totalPages: 1,
             };
-
             state.status = "succeeded";
             state.error = null;
         },
@@ -197,13 +251,12 @@ const bookSlice = createSlice({
             })
             .addCase(getAllBooks.fulfilled, (state, action) => {
                 state.results = action.payload;
-                console.log(action.payload)
                 state.status = "succeeded";
                 state.error = null;
             })
             .addCase(getAllBooks.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.payload || "Unknown error";
+                state.error = action.payload || "Fetching all books failed";
             })
             .addCase(filteredBooks.pending, (state) => {
                 state.status = "loading";
@@ -216,7 +269,7 @@ const bookSlice = createSlice({
             })
             .addCase(filteredBooks.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.payload || "Unknown error";
+                state.error = action.payload || "Fetching filtered books failed";
             })
             .addCase(allBooksFilters.pending, (state) => {
                 state.status = "loading";
@@ -232,8 +285,31 @@ const bookSlice = createSlice({
             })
             .addCase(allBooksFilters.rejected, (state, action) => {
                 state.status = "failed";
+                state.error = action.payload || "Fetching all filters failed";
+            })
+            .addCase(fetchSuggestions.fulfilled, (state, action) => {
+                state.suggestions = action.payload;
+            })
+            .addCase(fetchSuggestions.rejected, (state) => {
+                state.suggestions = {
+                    title: [],
+                    isbn: [],
+                    author: [],
+                    publisher: [],
+                };
+            })
+            .addCase(searchBooks.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(searchBooks.fulfilled, (state, action) => {
+                state.results = action.payload;
+                state.status = "succeeded";
+            })
+            .addCase(searchBooks.rejected, (state, action) => {
+                state.status = "failed";
                 state.error = action.payload || "Unknown error";
-            });
+            });;
     },
 });
 

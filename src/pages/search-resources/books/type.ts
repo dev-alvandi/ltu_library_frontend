@@ -3,7 +3,8 @@ interface FILTERS_TYPE {
     categories: Record<string, number>,
     minYear: number;
     maxYear: number;
-    availabilities: ("Available to Borrow" | "Reserved Only")[];
+    isAvailable: boolean;
+    page?: number;
 }
 
 type RESOURCE_TYPES = "Books" | "Films" | "Magazines" | ""

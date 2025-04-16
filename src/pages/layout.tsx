@@ -3,7 +3,7 @@ import Navbar from "@/components/navbar/navbar.tsx";
 
 const Layout = () => {
     return (
-        <div>
+        <div className="max-w-[1300px] m-auto">
             <Navbar />
             <main className="mt-20">
                 <Outlet />

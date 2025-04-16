@@ -10,7 +10,7 @@ import Home from "@/pages/home/home.tsx";
 import Contact from "@/pages/contact/contact.tsx";
 import {ALL_POSSIBLE_RESOURCES, AUTHENTICATED_NAVBAR_PATHS, UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import SearchResources from "@/pages/search-resources/searchResources.tsx";
+import SearchBookResources from "@/pages/search-resources/books/searchBookResources.tsx";
 import Dashboard from "@/pages/dashboard/dashboard.tsx";
 import {useEffect, useState} from "react";
 import {isJwtTokenValid} from "@/store/userSlice.ts";
@@ -55,9 +55,9 @@ function App() {
                 <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Home"]} element={<Layout/>}>
                     <Route index element={<Home/>}/>
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Contact Us"]} element={<Contact/>}/>
-                    <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Books"]} element={<SearchResources resource={ALL_POSSIBLE_RESOURCES["books"]}/>}/>
-                    <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Films"]} element={<SearchResources resource={ALL_POSSIBLE_RESOURCES["films"]} />}/>
-                    <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Magazines"]} element={<SearchResources resource={ALL_POSSIBLE_RESOURCES["magazines"]} />}/>
+                    <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Books"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["books"]}/>}/>
+                    <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Films"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["films"]} />}/>
+                    <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Magazines"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["magazines"]} />}/>
                     {
                         user && Object.keys(user).length > 0 && (
                             <>
