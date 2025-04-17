@@ -1,6 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {getErrorMessage} from "@/utils/getErrorMessage.ts";
-import axiosInstance from "@/config/api.ts";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
     userId: number;
@@ -33,18 +31,18 @@ const initialState: UserState = {
 };
 
 // ✅ Thunk to validate JWT
-export const isJwtTokenValid = createAsyncThunk<
-    User, // Success type
-    void, // No argument
-    { rejectValue: string } // Custom error return
->("user/isJwtTokenValid", async (_, thunkAPI) => {
-    try {
-        const response = await axiosInstance.get<User>(`/auth/is-jwt-valid`);
-        return response.data;
-    } catch (error) {
-        return thunkAPI.rejectWithValue(getErrorMessage(error));
-    }
-});
+// export const isJwtTokenValid = createAsyncThunk<
+//     User, // Success type
+//     void, // No argument
+//     { rejectValue: string } // Custom error return
+// >("user/isJwtTokenValid", async (_, thunkAPI) => {
+//     try {
+//         const response = await axiosInstance.get<User>(`/auth/is-jwt-valid`);
+//         return response.data;
+//     } catch (error) {
+//         return thunkAPI.rejectWithValue(getErrorMessage(error));
+//     }
+// });
 
 const userSlice = createSlice({
     name: "user",
@@ -61,23 +59,25 @@ const userSlice = createSlice({
             state.error = null;
         },
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(isJwtTokenValid.pending, (state) => {
-                state.status = "loading";
-                state.error = null;
-            })
-            .addCase(isJwtTokenValid.fulfilled, (state, action) => {
-                state.user = action.payload;
-                state.status = "succeeded";
-                state.error = null;
-            })
-            .addCase(isJwtTokenValid.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload || "Unknown error";
-                state.user = null;
-            });
-    },
+    // extraReducers: (builder) => {
+    //     builder
+    //         .addCase(isJwtTokenValid.pending, (state) => {
+    //             state.status = "loading";
+    //             state.error = null;
+    //         })
+    //         .addCase(isJwtTokenValid.fulfilled, (state, action) => {
+    //             state.user = action.payload;
+    //             state.status = "succeeded";
+    //             state.error = null;
+    //         })
+    //         .addCase(isJwtTokenValid.rejected, (state, action) => {
+    //             state.status = "failed";
+    //             state.user = null;
+    //             localStorage.removeItem("token");
+    //             state.error = action.payload || "Unknown error";
+    //             state.user = null;
+    //         });
+    // },
 });
 
 export const { setUser, clearUser } = userSlice.actions;

@@ -1,27 +1,21 @@
-import { Link, useLocation, useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "@/store/store.ts";
+import {Link, useLocation, useNavigate} from "react-router";
+import {useAppDispatch, useAppSelector} from "@/store/store.ts";
 import {
     AUTHENTICATED_NAVBAR_PATHS,
     AUTHENTICATED_NAVBAR_PATHS_TYPE,
     UNAUTHENTICATED_NAVBAR_PATHS,
     UNAUTHENTICATED_NAVBAR_PATHS_TYPE,
 } from "@/constants.ts";
-import { useEffect, useState } from "react";
-import { logout } from "@/store/authSlice.ts";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
+import {useEffect, useState} from "react";
+import {logout} from "@/store/authSlice.ts";
+import {Button} from "@/components/ui/button";
+import {Menu} from "lucide-react";
+import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet";
 
 const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const user = useAppSelector((state) => state.user.user);
+    const user = useAppSelector((state) => state.auth.user);
     const dispatch = useAppDispatch();
 
     const [navbarItems, setNavbarItems] = useState<
@@ -67,10 +61,10 @@ const Navbar = () => {
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon">
-                                <Menu className="text-white" />
+                                <Menu className="text-white"/>
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="right" className="bg-[#030712] text-white w-64">
+                        <SheetContent side="right" className="bg-[#030712] text-white w-64 border-0">
                             <SheetHeader>
                                 <SheetTitle className="text-left">Menu</SheetTitle>
                             </SheetHeader>

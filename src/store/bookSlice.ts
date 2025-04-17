@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {API_BASE_URL} from "@/config/api.ts";
-import { getErrorMessage } from "@/utils/getErrorMessage.ts";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import axiosInstance, {API_BASE_URL} from "@/config/api.ts";
+import {getErrorMessage} from "@/utils/getErrorMessage.ts";
 import {FILTERS_TYPE} from "@/pages/search-resources/books/type.ts";
 import axios from "axios";
 import {ReceivingBook} from "@/types/entitiesType.ts";
@@ -124,9 +124,8 @@ export const getAllBooks = createAsyncThunk<PaginationBookResponse, number, { re
         try {
             const response = await axios.get<PaginationBookResponse>(
                 `${API_BASE_URL}/resources/books`,
-                { params: { page: pageIndex } }
+                {params: {page: pageIndex}}
             );
-
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(getErrorMessage(error));
@@ -185,7 +184,6 @@ export const searchBooks = createAsyncThunk<PaginationBookResponse, SearchBooksA
     "books/searchBooks",
     async (args, thunkAPI) => {
         try {
-            console.log("Args ", args)
             const response = await axios.get<PaginationBookResponse>(
                 `${API_BASE_URL}/resources/searched-books`,
                 {
@@ -195,11 +193,25 @@ export const searchBooks = createAsyncThunk<PaginationBookResponse, SearchBooksA
             );
             console.log(response.data)
             return response.data;
-        } catch (error) {
+        } catch (error: unknown) {
             return thunkAPI.rejectWithValue("Search failed");
         }
     }
 );
+
+export const borrowBook = createAsyncThunk<
+    string, // success message or response DTO
+    string, // bookId
+    { rejectValue: string }
+>("books/borrowBook", async (bookId, thunkAPI) => {
+    try {
+        const response = await axiosInstance.post(`/resources/borrow/${bookId}`);
+        thunkAPI.dispatch(bookSlice.actions.updateBookByBookIdUponSuccessfulBorrow(response.data.book.bookId));
+        return response.data.message || "Book borrowed successfully";
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
 
 const bookSlice = createSlice({
     name: "books",
@@ -242,6 +254,12 @@ const bookSlice = createSlice({
             state.status = "idle";
             state.error = null;
         },
+        updateBookByBookIdUponSuccessfulBorrow: (state, action: PayloadAction<string>) => {
+            const book = state.results?.content.find(b => b.bookId === action.payload);
+            if (book && book.numberOfAvailableToBorrowCopies > 0) {
+                book.numberOfAvailableToBorrowCopies -= 1;
+            }
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -309,9 +327,21 @@ const bookSlice = createSlice({
             .addCase(searchBooks.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload || "Unknown error";
-            });;
+            })
+            .addCase(borrowBook.pending, (state) => {
+            state.status = "loading";
+            state.error = null;
+            })
+            .addCase(borrowBook.fulfilled, (state) => {
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(borrowBook.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Borrowing failed";
+            });
     },
 });
 
-export const { setBooks, clearBooks } = bookSlice.actions;
+export const {setBooks, clearBooks} = bookSlice.actions;
 export default bookSlice.reducer;

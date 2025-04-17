@@ -1,8 +1,20 @@
 import axios from "axios";
 
-export const getErrorMessage = (error: unknown): string => {
+// utils/getErrorMessage.ts
+export function getErrorMessage(error: unknown): string {
     if (axios.isAxiosError(error)) {
-        return error.response?.data?.message || error.message;
+        return (
+            error.response?.data?.message || // Spring ResponseStatusException message
+            error.response?.data?.error ||   // fallback: sometimes Spring sends this
+            error.response?.data ||          // raw text fallback
+            error.message ||
+            "Unknown Axios error"
+        );
     }
-    return 'An unknown error occurred';
-};
+
+    if (error instanceof Error) {
+        return error.message;
+    }
+
+    return String(error);
+}

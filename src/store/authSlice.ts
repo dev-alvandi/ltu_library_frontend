@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {AuthValues} from "@/pages/auth/type.ts";
-import {API_BASE_URL} from "@/config/api.ts";
+import axiosInstance, {API_BASE_URL} from "@/config/api.ts";
 import {PasswordResetValues, RequestPasswordResetValues} from "@/pages/auth/password-reset/type.ts";
 import {User} from "@/types/entitiesType.ts";
 import {getErrorMessage} from "@/utils/getErrorMessage.ts";
@@ -14,7 +14,7 @@ export interface AuthResponse {
 export interface AuthState {
     user: User | null;
     token: string | null;
-    loginStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    authenticationStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     registerStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     resetStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
 
@@ -69,10 +69,23 @@ export const resetPassword = createAsyncThunk<AuthResponse, PasswordResetValues,
     }
 );
 
+export const isJwtTokenValid = createAsyncThunk<
+    User, // Success type
+    void, // No argument
+    { rejectValue: string } // Custom error return
+>("user/isJwtTokenValid", async (_, thunkAPI) => {
+    try {
+        const response = await axiosInstance.get<User>(`/auth/is-jwt-valid`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
 const initialState: AuthState = {
     user: null,
     token: null,
-    loginStatus: 'idle',
+    authenticationStatus: 'idle',
     registerStatus: 'idle',
     resetStatus: 'idle',
     error: null,
@@ -102,7 +115,7 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
                 state.token = action.payload.token;
                 localStorage.setItem("token", action.payload.token);
-                state.loginStatus = 'succeeded';
+                state.authenticationStatus = 'succeeded';
                 state.error = null;
             })
             .addCase(requestResetPassword.fulfilled, (state) => {
@@ -118,7 +131,7 @@ const authSlice = createSlice({
                 state.error = action.payload || 'Registration failed';
             })
             .addCase(loginUser.rejected, (state, action) => {
-                state.loginStatus = 'failed';
+                state.authenticationStatus = 'failed';
                 state.error = action.payload || 'Login failed';
             })
             .addCase(requestResetPassword.rejected, (state, action) => {
@@ -134,7 +147,7 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(loginUser.pending, (state) => {
-                state.loginStatus = 'loading';
+                state.authenticationStatus = 'loading';
                 state.error = null;
             })
             .addCase(requestResetPassword.pending, (state) => {
@@ -144,6 +157,25 @@ const authSlice = createSlice({
             .addCase(resetPassword.pending, (state) => {
                 state.resetStatus = 'loading';
                 state.error = null;
+            })
+
+
+            .addCase(isJwtTokenValid.pending, (state) => {
+                state.authenticationStatus = "loading";
+                state.error = null;
+            })
+            .addCase(isJwtTokenValid.fulfilled, (state, action) => {
+                state.user = action.payload;
+                state.token = localStorage.getItem("token");
+                state.authenticationStatus = "succeeded";
+                state.error = null;
+            })
+            .addCase(isJwtTokenValid.rejected, (state, action) => {
+                state.authenticationStatus = "failed";
+                state.user = null;
+                localStorage.removeItem("token");
+                state.error = action.payload || "Unknown error";
+                state.user = null;
             })
     },
 });

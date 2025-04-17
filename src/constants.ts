@@ -14,6 +14,7 @@ const AUTHENTICATED_NAVBAR_PATHS = {
     "Books": "/books",
     "Films": "/films",
     "Magazines": "/magazines",
+    // "Cart": "/cart",
     "Dashboard": "/dashboard",
     "Contact Us": "/contact-us",
     "Logout": "/auth"

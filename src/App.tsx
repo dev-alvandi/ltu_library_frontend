@@ -13,7 +13,7 @@ import {useAppDispatch, useAppSelector} from "@/store/store.ts";
 import SearchBookResources from "@/pages/search-resources/books/searchBookResources.tsx";
 import Dashboard from "@/pages/dashboard/dashboard.tsx";
 import {useEffect, useState} from "react";
-import {isJwtTokenValid} from "@/store/userSlice.ts";
+import {isJwtTokenValid} from "@/store/authSlice.ts";
 import Loading from "@/components/loading/loading.tsx";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
     const [loading, setLoading] = useState(true)
 
     const dispatch = useAppDispatch();
-    const user = useAppSelector(state => state.user.user);
+    const user = useAppSelector(state => state.auth.user);
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -62,6 +62,7 @@ function App() {
                         user && Object.keys(user).length > 0 && (
                             <>
                                 <Route path={AUTHENTICATED_NAVBAR_PATHS["Dashboard"]} element={<Dashboard/>}/>
+                                {/*<Route path={AUTHENTICATED_NAVBAR_PATHS["Cart"]} element={<Cart />}/>*/}
                             </>
                         )
                     }

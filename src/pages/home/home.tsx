@@ -5,9 +5,6 @@ import { BookOpen, User } from "lucide-react";
 import {useAppSelector} from "@/store/store.ts";
 
 const Home = () => {
-const auth = useAppSelector((state) => state.auth)
-
-    console.log(auth);
 
     return (
         <main className="flex flex-col items-center justify-center min-h-[80vh] px-6 py-12 bg-background text-foreground space-y-8">

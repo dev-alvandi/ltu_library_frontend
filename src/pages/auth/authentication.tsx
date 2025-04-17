@@ -133,7 +133,7 @@ export default function Authentication() {
         <div className="min-h-screen flex justify-center items-center bg-[#030712]">
             <Card className="max-w-md bg-transparent rounded-[4px] border-[#27272a]">
                 <CardContent className="md:p-8 p-3">
-                    <div className="flex flex-col items-center gap-3">
+                    <div className="flex flex-col items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
                         <img className="w-1/3" src="/logo-white-background-transparent.png" alt="LTU"/>
                         <h2 className="text-4xl font-extrabold text-(--color-text-white)
                             libre-baskerville text-center">
