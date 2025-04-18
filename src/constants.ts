@@ -17,10 +17,18 @@ const AUTHENTICATED_NAVBAR_PATHS = {
     // "Cart": "/cart",
     "Dashboard": "/dashboard",
     "Contact Us": "/contact-us",
-    "Logout": "/auth"
+    "Logout": "/"
 }
 
 type AUTHENTICATED_NAVBAR_PATHS_TYPE = typeof AUTHENTICATED_NAVBAR_PATHS;
+
+
+const DASHBOARD_NAVBAR_PATHS = {
+    "Profile": "/dashboard/profile",
+    "My Loans": "/dashboard/my-loans",
+    "My Reservations": "/dashboard/my-reservations",
+    // "Settings": "/dashboard/settings"
+}
 
 const ALL_POSSIBLE_RESOURCES = {
     books: "Books",
@@ -43,7 +51,8 @@ const ALL_POSSIBLE_RESOURCES = {
 export {
     UNAUTHENTICATED_NAVBAR_PATHS,
     AUTHENTICATED_NAVBAR_PATHS,
-    ALL_POSSIBLE_RESOURCES
+    ALL_POSSIBLE_RESOURCES,
+    DASHBOARD_NAVBAR_PATHS
 }
 
 export type {

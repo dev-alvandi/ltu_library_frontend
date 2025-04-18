@@ -9,19 +9,19 @@ import Layout from "@/pages/layout.tsx";
 import Home from "@/pages/home/home.tsx";
 import Contact from "@/pages/contact/contact.tsx";
 import {ALL_POSSIBLE_RESOURCES, AUTHENTICATED_NAVBAR_PATHS, UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
-import {useAppDispatch, useAppSelector} from "@/store/store.ts";
+import {useAppDispatch} from "@/store/store.ts";
 import SearchBookResources from "@/pages/search-resources/books/searchBookResources.tsx";
 import Dashboard from "@/pages/dashboard/dashboard.tsx";
 import {useEffect, useState} from "react";
 import {isJwtTokenValid} from "@/store/authSlice.ts";
 import Loading from "@/components/loading/loading.tsx";
+import ProtectedRoute from "@/pages/auth/protected-route.tsx";
 
 function App() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
 
     const dispatch = useAppDispatch();
-    const user = useAppSelector(state => state.auth.user);
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -58,15 +58,11 @@ function App() {
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Books"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["books"]}/>}/>
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Films"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["films"]} />}/>
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Magazines"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["magazines"]} />}/>
-                    {
-                        user && Object.keys(user).length > 0 && (
-                            <>
-                                <Route path={AUTHENTICATED_NAVBAR_PATHS["Dashboard"]} element={<Dashboard/>}/>
-                                {/*<Route path={AUTHENTICATED_NAVBAR_PATHS["Cart"]} element={<Cart />}/>*/}
-                            </>
-                        )
-                    }
-                    {/*<Route path="" element={< />}/>*/}
+                    <Route path={`${AUTHENTICATED_NAVBAR_PATHS["Dashboard"]}/*`} element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    } />
                 </Route>
             </Routes>
             <ToastContainer position="top-right" autoClose={3000}/>

@@ -68,7 +68,7 @@ const registerSchemaZod = z.object({
 
 export default function Authentication() {
     const dispatch = useAppDispatch();
-    const { loginStatus, registerStatus } = useAppSelector((state) => state.auth);
+    const { authenticationStatus, registerStatus } = useAppSelector((state) => state.auth);
 
 
     const [isRegister, setIsRegister] = useState(false);
@@ -320,7 +320,7 @@ export default function Authentication() {
                                     </div>
                                 )}
                                 <Button type="submit"
-                                        disabled={isRegister ? registerStatus === 'loading' : loginStatus === 'loading'}
+                                        disabled={isRegister ? registerStatus === 'loading' : authenticationStatus === 'loading'}
                                         className="cursor-pointer custom-btn">
                                     {isRegister ? "Create Account" : "Login"}
                                 </Button>

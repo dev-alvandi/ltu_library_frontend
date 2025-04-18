@@ -12,7 +12,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogFooter,
-    DialogTitle,
+    DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import {borrowBook} from "@/store/bookSlice.ts";
@@ -138,9 +138,9 @@ const BookResource = ({ book }: Props) => {
                                     {isBorrowable ? "Confirm Borrowing" : "Confirm Reservation"}
                                 </DialogTitle>
                             </DialogHeader>
-                            <p>
+                            <DialogDescription className="text-gray-300">
                                 Are you sure you want to {isBorrowable ? "borrow" : "reserve"} "{book.title}"?
-                            </p>
+                            </DialogDescription>
                             <DialogFooter className="mt-4">
                                 <Button className="cursor-pointer" variant="destructive" onClick={() => setOpen(false)}>
                                     Cancel
