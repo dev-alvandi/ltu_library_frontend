@@ -1,13 +1,13 @@
-import { useFormik } from "formik";
-import { z } from "zod";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { Checkbox } from "@/components/ui/checkbox.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { MultiSelect } from "@/components/ui/multi-select.tsx";
-import { FILTERS_TYPE } from "./type.ts";
-import { ALL_POSSIBLE_RESOURCES } from "@/constants.ts";
-import {useCallback} from "react";
+import {useFormik} from "formik";
+import {z} from "zod";
+import {toFormikValidationSchema} from "zod-formik-adapter";
+import {Checkbox} from "@/components/ui/checkbox.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {MultiSelect} from "@/components/ui/multi-select.tsx";
+import {FILTERS_TYPE} from "./type.ts";
+import {ALL_POSSIBLE_RESOURCES} from "@/constants.ts";
+import {useEffect, useRef, useState} from "react";
 
 const filterSchema = z.object({
     isAvailable: z.boolean(),
@@ -27,10 +27,15 @@ interface Props {
 }
 
 const FilterBookGrid = ({
-                        allFilters,
-                        setUserFilters,
-                        resourceName,
-                    }: Props) => {
+                            allFilters,
+                            setUserFilters,
+                            resourceName,
+                        }: Props) => {
+
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(Object.keys(allFilters.categories));
+    const [selectedLanguages, setSelectedLanguages] = useState<string[]>(Object.keys(allFilters.languages));
+
+    const isFirstRender = useRef(true);
 
     const formik = useFormik<FilterFormType>({
         initialValues: allFilters,
@@ -41,8 +46,13 @@ const FilterBookGrid = ({
         },
     });
 
-    const handleCategoryChange = useCallback((val: string[]) => {
-        const updated = val.reduce((acc, key) => {
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        const updated = selectedCategories.reduce((acc, key) => {
             if (allFilters.categories[key] !== undefined) {
                 acc[key] = allFilters.categories[key];
             }
@@ -50,20 +60,20 @@ const FilterBookGrid = ({
         }, {} as Record<string, number>);
 
         formik.setFieldValue("categories", updated);
-    }, [allFilters.categories, formik]);
+    }, [selectedCategories]);
 
-    const handleLanguageChange = useCallback((val: string[]) => {
-        const updated = val.reduce((acc, key) => {
+    useEffect(() => {
+        if (isFirstRender.current) return;
+
+        const updated = selectedLanguages.reduce((acc, key) => {
             if (allFilters.languages[key] !== undefined) {
                 acc[key] = allFilters.languages[key];
             }
             return acc;
         }, {} as Record<string, number>);
 
-
         formik.setFieldValue("languages", updated);
-    }, [allFilters.languages, formik]);
-
+    }, [selectedLanguages]);
 
 
     return (
@@ -103,30 +113,33 @@ const FilterBookGrid = ({
                 />
             </div>
 
-            {/* Categories */}
-            <MultiSelect
-                options={Object.keys(allFilters.categories).map((cat) => ({
-                    label: `${cat} (${allFilters.categories[cat]})`,
-                    value: cat,
-                }))}
-                value={Object.keys(formik.values.categories)}
-                // defaultValue={Object.keys(normalizedFilters.categories)}
-                onValueChange={handleCategoryChange}
-                placeholder="Select Categories"
-            />
+            {
+                formik.values && (
+                    <>
+                        {/* Categories */}
+                        <MultiSelect
+                            options={Object.keys(allFilters.categories).map((cat) => ({
+                                label: `${cat} (${allFilters.categories[cat]})`,
+                                value: cat,
+                            }))}
+                            value={selectedCategories}
+                            onValueChange={setSelectedCategories}
+                            placeholder="Select Categories"
+                        />
 
-
-            {/* Language Filters */}
-            <MultiSelect
-                options={Object.keys(allFilters.languages).map((lang) => ({
-                    label: `${lang} (${allFilters.languages[lang]})`,
-                    value: lang,
-                }))}
-                value={Object.keys(formik.values.languages)}
-                // defaultValue={Object.keys(normalizedFilters.languages)}
-                onValueChange={handleLanguageChange}
-                placeholder="Languages"
-            />
+                        {/* Language Filters */}
+                        <MultiSelect
+                            options={Object.keys(allFilters.languages).map((lang) => ({
+                                label: `${lang} (${allFilters.languages[lang]})`,
+                                value: lang,
+                            }))}
+                            value={selectedLanguages}
+                            onValueChange={setSelectedLanguages}
+                            placeholder="Languages"
+                        />
+                    </>
+                )
+            }
 
 
             <Button type="submit" className="mt-2 cursor-pointer">
