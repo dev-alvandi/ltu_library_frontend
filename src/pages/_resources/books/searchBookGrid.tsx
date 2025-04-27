@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import {z, ZodError} from "zod";
+import { z, ZodError } from "zod";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import {fetchSuggestions} from "@/store/bookSlice.ts";
+import { fetchSuggestions } from "@/store/bookSlice.ts";
 
 const searchSchema = z.object({
     query: z.string().trim().min(1, "Search term required"),
@@ -12,7 +12,7 @@ const searchSchema = z.object({
 
 interface Props {
     searchTerm?: string;
-    setSearchTerm: (searchTerm: string) => void
+    setSearchTerm: (searchTerm: string) => void;
 }
 
 const SearchBookGrid = ({ searchTerm = "", setSearchTerm }: Props) => {
@@ -20,6 +20,8 @@ const SearchBookGrid = ({ searchTerm = "", setSearchTerm }: Props) => {
     const suggestions = useAppSelector((state) => state.book.suggestions);
 
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const suggestionsRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const formik = useFormik({
         initialValues: { query: searchTerm },
@@ -38,7 +40,7 @@ const SearchBookGrid = ({ searchTerm = "", setSearchTerm }: Props) => {
         onSubmit: (values) => {
             const trimmed = values.query.trim();
             setShowSuggestions(false);
-            setSearchTerm(trimmed)
+            setSearchTerm(trimmed);
         },
     });
 
@@ -64,13 +66,29 @@ const SearchBookGrid = ({ searchTerm = "", setSearchTerm }: Props) => {
         setSearchTerm(value);
     };
 
-    // console.log(suggestions)
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                suggestionsRef.current &&
+                !suggestionsRef.current.contains(event.target as Node) &&
+                !inputRef.current?.contains(event.target as Node)
+            ) {
+                setShowSuggestions(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="w-full relative max-w-xl">
             <form onSubmit={formik.handleSubmit} className="w-full flex gap-4 mb-4">
                 <Input
                     name="query"
+                    ref={inputRef}
                     value={formik.values.query}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -84,7 +102,10 @@ const SearchBookGrid = ({ searchTerm = "", setSearchTerm }: Props) => {
             </form>
 
             {showSuggestions && Object.values(suggestions).some((list) => list.length > 0) && (
-                <div className="absolute z-10 w-full bg-white shadow-md border rounded-md max-h-60 overflow-y-auto">
+                <div
+                    ref={suggestionsRef}
+                    className="absolute top-full left-0 w-full z-10 bg-white shadow-md border rounded-md max-h-60 overflow-y-auto"
+                >
                     {Object.entries(suggestions).map(([field, values]) =>
                         values.length > 0 ? (
                             <div key={field}>

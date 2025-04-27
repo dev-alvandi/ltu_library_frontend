@@ -1,8 +1,8 @@
 import {useEffect, useMemo, useState} from "react";
-import FilterBookGrid from "@/pages/search-resources/books/filterBookGrid.tsx";
-import SearchBookGrid from "@/pages/search-resources/books/searchBookGrid.tsx";
-import BookResourceGrid from "@/pages/search-resources/books/bookResourceGrid.tsx";
-import {FILTERS_TYPE} from "@/pages/search-resources/books/type.ts";
+import FilterBookGrid from "@/pages/_resources/books/filterBookGrid.tsx";
+import SearchBookGrid from "@/pages/_resources/books/searchBookGrid.tsx";
+import BookResourceGrid from "@/pages/_resources/books/bookResourceGrid.tsx";
+import {FILTERS_TYPE} from "@/pages/_resources/books/type.ts";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
 import {allBooksFilters, filteredBooks, getAllBooks, searchBooks} from "@/store/bookSlice.ts";
 import {
@@ -47,6 +47,8 @@ const SearchBookResources = ({resource}: { resource: string }) => {
         maxPublishedYear,
         results,
     } = useAppSelector(state => state.book);
+
+    const userType = useAppSelector((state) => state.auth.user?.userType?.toUpperCase().trim());
 
     const [userFilters, setUserFilters] = useState<FILTERS_TYPE>(defaultFilters);
     const [searchTerm, setSearchTerm] = useState("");
@@ -133,7 +135,7 @@ const SearchBookResources = ({resource}: { resource: string }) => {
                 </div>
                 {/*<Separator />*/}
                 <BookResourceGrid resourceName={resource} results={results} currentPage={currentPage}
-                                  setCurrentPage={setCurrentPage}/>
+                                  setCurrentPage={setCurrentPage} userType={userType || "STUDENT"}/>
             </div>
         </div>
     );

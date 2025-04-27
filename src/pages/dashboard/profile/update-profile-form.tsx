@@ -64,12 +64,12 @@ const UpdateProfileForm = () => {
                         <div className="flex flex-col gap-2 md:flex-row md:gap-4">
                             <div className="auth-input-style">
                                 <label htmlFor="firstName" className="auth-label-style">First name</label>
-                                <Field name="firstName" as={Input} type="text" className="auth-field-style" />
+                                <Field name="firstName" as={Input} type="text" className="auth-field-style capitalize" />
                                 <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
                             </div>
                             <div className="auth-input-style">
                                 <label htmlFor="lastName" className="auth-label-style">Last name</label>
-                                <Field name="lastName" as={Input} type="text" className="auth-field-style" />
+                                <Field name="lastName" as={Input} type="text" className="auth-field-style capitalize" />
                                 <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
                             </div>
                         </div>
@@ -89,12 +89,12 @@ const UpdateProfileForm = () => {
                         <div className="flex flex-col gap-2 md:flex-row md:gap-4">
                             <div className="auth-input-style">
                                 <label htmlFor="city" className="auth-label-style">City</label>
-                                <Field name="city" as={Input} type="text" className="auth-field-style" />
+                                <Field name="city" as={Input} type="text" className="auth-field-style capitalize" />
                                 <ErrorMessage name="city" component="div" className="text-red-500 text-sm" />
                             </div>
                             <div className="auth-input-style">
                                 <label htmlFor="street" className="auth-label-style">Street</label>
-                                <Field name="street" as={Input} type="text" className="auth-field-style" />
+                                <Field name="street" as={Input} type="text" className="auth-field-style capitalize" />
                                 <ErrorMessage name="street" component="div" className="text-red-500 text-sm" />
                             </div>
                             <div className="auth-input-style">

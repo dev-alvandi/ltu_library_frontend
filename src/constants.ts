@@ -16,6 +16,7 @@ const AUTHENTICATED_NAVBAR_PATHS = {
     "Magazines": "/magazines",
     // "Cart": "/cart",
     "Dashboard": "/dashboard",
+    // "Edit Resources": "/edit-resources",
     "Contact Us": "/contact-us",
     "Logout": "/"
 }
@@ -27,6 +28,8 @@ const DASHBOARD_NAVBAR_PATHS = {
     "Profile": "/dashboard/profile",
     "My Loans": "/dashboard/my-loans",
     "My Reservations": "/dashboard/my-reservations",
+    "Add Resources": "/dashboard/add-resources",
+    "Employee Management": "/dashboard/employee-management",
     // "Settings": "/dashboard/settings"
 }
 

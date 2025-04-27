@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import {borrowBook} from "@/store/bookSlice.ts";
 import {useDispatch} from "react-redux";
+import {cn} from "@/lib/utils.ts";
 
 interface Props {
     book: Pick<
@@ -34,9 +35,10 @@ interface Props {
         | "numberOfCopies"
         | "numberOfAvailableToBorrowCopies"
     >;
+    userType: string;
 }
 
-const BookResource = ({ book }: Props) => {
+const BookResource = ({ book, userType }: Props) => {
     const auth = useAppSelector((state) => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
@@ -114,12 +116,12 @@ const BookResource = ({ book }: Props) => {
                     </div>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 flex justify-between gap-4">
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger asChild>
                             <Button
                                 variant="default"
-                                className="w-full relative h-12 overflow-hidden group text-white font-semibold cursor-pointer"
+                                className={cn(!["LIBRARIAN", "ADMIN"].includes(userType) && "w-full" , "relative h-12 overflow-hidden group text-white font-semibold cursor-pointer")}
                             >
                                 {isBorrowable ? "Borrow" : "Reserve"}
                                 {/*/!* Original label *!/*/}
@@ -151,6 +153,15 @@ const BookResource = ({ book }: Props) => {
                             </DialogFooter>
                         </DialogContent>
                     </Dialog>
+                    {userType && ["LIBRARIAN", "ADMIN"].includes(userType) && (
+                        <Button
+                            variant="default"
+                            className="bg-[#3D90D7] relative h-12 overflow-hidden group text-white font-semibold cursor-pointer"
+                            onClick={() => navigate(`/manage-resources/books/${book.bookId}`)}
+                        >
+                            Manage
+                        </Button>
+                    )}
                 </div>
             </CardContent>
         </Card>

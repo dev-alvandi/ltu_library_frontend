@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { BookOpen, User } from "lucide-react";
-import {useAppSelector} from "@/store/store.ts";
 
 const Home = () => {
 
@@ -31,7 +30,7 @@ const Home = () => {
 
                 <CardContent className="flex justify-center">
                     <img
-                        src="/reading-illustration.svg"
+                        src="/logo-blue-background-transparent.png"
                         alt="Students reading"
                         className="max-h-64 rounded-xl shadow-md"
                     />

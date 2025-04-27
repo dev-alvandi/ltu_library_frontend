@@ -10,7 +10,7 @@ export type User = {
     postalCode: string;
     email: string;
     password: string;
-    userType: 0 | 1 | 2 | 3 | 4 | 5; // admin, librarian, student, researcher, university staff, public
+    userType: "ADMIN" | "LIBRARIAN" | "STUDENT" | "RESEARCHER" | "UNIVERSITY STAFF" | "PUBLIC"; // admin, librarian, student, researcher, university staff, public
 };
 
 // Book DTO
@@ -23,7 +23,7 @@ export type ReceivingBook = {
     isbn: string;
     language: string;
     imageUrl: string;
-    bookType: 'COURSE_LITERATURE' | 'PUBLIC'; // If there are other types, replace `string` with them
+    bookType: 'COURSE_LITERATURE' | 'PUBLIC';
     numberOfCopies: number;
     numberOfAvailableToBorrowCopies: number;
     bookCategory: {
@@ -31,6 +31,19 @@ export type ReceivingBook = {
         subject: string;
     };
 };
+
+export type SendingBook = {
+    bookId: string;
+    title: string;
+    isbn: string;
+    author: string;
+    publisher: string;
+    publishedYear: number;
+    bookType: 'COURSE_LITERATURE' | 'PUBLIC';
+    language: string;
+    bookCategory: string
+    image: File | null;
+}
 
 // Loan
 export type Loan = {

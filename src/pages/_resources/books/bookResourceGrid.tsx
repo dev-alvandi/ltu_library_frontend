@@ -7,16 +7,17 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination.tsx";
 import {PaginationBookResponse} from "@/store/bookSlice.ts";
-import BookResource from "@/pages/search-resources/books/bookResource.tsx";
+import BookResource from "@/pages/_resources/books/bookResource.tsx";
 
 interface Props {
     results: PaginationBookResponse | null;
     resourceName: string;
     currentPage: number,
-    setCurrentPage: (page: number) => void
+    setCurrentPage: (page: number) => void;
+    userType: string;
 }
 
-const BookResourceGrid = ({results, resourceName, currentPage, setCurrentPage}: Props) => {
+const BookResourceGrid = ({results, resourceName, currentPage, setCurrentPage, userType}: Props) => {
     const maxVisiblePages = 5; // Display range: 2 before + current + 2 after
 
     const totalPages = results?.totalPages || 1;
@@ -64,7 +65,7 @@ const BookResourceGrid = ({results, resourceName, currentPage, setCurrentPage}: 
         <div className="space-y-4 py-4 p-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {results?.content.map((item, index) => (
-                    <BookResource key={index} book={item}/>
+                    <BookResource key={index} book={item} userType={userType}/>
                 ))}
             </div>
 

@@ -10,12 +10,13 @@ import Home from "@/pages/home/home.tsx";
 import Contact from "@/pages/contact/contact.tsx";
 import {ALL_POSSIBLE_RESOURCES, AUTHENTICATED_NAVBAR_PATHS, UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 import {useAppDispatch} from "@/store/store.ts";
-import SearchBookResources from "@/pages/search-resources/books/searchBookResources.tsx";
+import SearchBookResources from "@/pages/_resources/books/searchBookResources.tsx";
 import Dashboard from "@/pages/dashboard/dashboard.tsx";
 import {useEffect, useState} from "react";
 import {isJwtTokenValid} from "@/store/authSlice.ts";
-import Loading from "@/components/loading/loading.tsx";
-import ProtectedRoute from "@/pages/auth/protected-route.tsx";
+import Loading from "@/components/loading.tsx";
+import ProtectedRoute from "@/utils/protected-route.tsx";
+import ManageResources from "@/pages/manage-resources/manage-resources.tsx";
 
 function App() {
     const navigate = useNavigate();
@@ -59,8 +60,15 @@ function App() {
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Films"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["films"]} />}/>
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Magazines"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["magazines"]} />}/>
                     <Route path={`${AUTHENTICATED_NAVBAR_PATHS["Dashboard"]}/*`} element={
-                        <ProtectedRoute>
-                            <Dashboard />
+                        <ProtectedRoute
+                            allowedRoles={["LIBRARIAN", "ADMIN", "STUDENT", "UNIVERSITY STAFF", "PUBLIC"]}>
+                                <Dashboard />
+                        </ProtectedRoute>
+                    } />
+                    <Route path={`/manage-resources/*`} element={
+                        <ProtectedRoute
+                            allowedRoles={["LIBRARIAN", "ADMIN"]}>
+                                <ManageResources />
                         </ProtectedRoute>
                     } />
                 </Route>

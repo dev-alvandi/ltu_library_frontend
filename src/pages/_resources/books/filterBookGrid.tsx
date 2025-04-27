@@ -142,7 +142,7 @@ const FilterBookGrid = ({
             }
 
 
-            <Button type="submit" className="mt-2 cursor-pointer">
+            <Button type="submit" className="w-full relative h-12 overflow-hidden group text-white font-semibold cursor-pointer">
                 Apply Filters
             </Button>
         </form>

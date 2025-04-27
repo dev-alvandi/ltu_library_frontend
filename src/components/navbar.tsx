@@ -8,9 +8,9 @@ import {
 } from "@/constants.ts";
 import {useEffect, useState} from "react";
 import {logout} from "@/store/authSlice.ts";
-import {Button} from "@/components/ui/button";
+import {Button} from "@/components/ui/button.tsx";
 import {Menu} from "lucide-react";
-import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet";
+import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet.tsx";
 
 const Navbar = () => {
     const location = useLocation();

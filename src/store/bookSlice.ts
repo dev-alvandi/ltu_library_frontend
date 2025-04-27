@@ -1,10 +1,10 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import axiosInstance, {API_BASE_URL} from "@/config/api.ts";
 import {getErrorMessage} from "@/utils/getErrorMessage.ts";
-import {FILTERS_TYPE} from "@/pages/search-resources/books/type.ts";
+import {FILTERS_TYPE} from "@/pages/_resources/books/type.ts";
 import axios from "axios";
 import {ReceivingBook} from "@/types/entitiesType.ts";
-import {booksParamsSerializer} from "@/utils/booksParamsSerializer.ts";
+import {booksParamsSerializer} from "@/utils/books-params-serializer.ts";
 
 
 interface AllBooksFilters {
@@ -94,7 +94,8 @@ interface BookState {
     maxPublishedYear: number;
     status: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
-    suggestions: Suggestions
+    suggestions: Suggestions;
+    fetchedBook: ReceivingBook | null;
 }
 
 
@@ -115,7 +116,7 @@ const initialState: BookState = {
         author: [],
         publisher: [],
     },
-
+    fetchedBook: null
 };
 
 export const getAllBooks = createAsyncThunk<PaginationBookResponse, number, { rejectValue: string }>(
@@ -180,7 +181,10 @@ export const fetchSuggestions = createAsyncThunk<Suggestions, string, { rejectVa
     }
 );
 
-export const searchBooks = createAsyncThunk<PaginationBookResponse, SearchBooksArgs, { rejectValue: string }>(
+export const searchBooks = createAsyncThunk<
+    PaginationBookResponse,
+    SearchBooksArgs,
+    { rejectValue: string }>(
     "books/searchBooks",
     async (args, thunkAPI) => {
         try {
@@ -193,8 +197,8 @@ export const searchBooks = createAsyncThunk<PaginationBookResponse, SearchBooksA
             );
             console.log(response.data)
             return response.data;
-        } catch (error: unknown) {
-            return thunkAPI.rejectWithValue("Search failed");
+        } catch (error) {
+            return thunkAPI.rejectWithValue(getErrorMessage(error));
         }
     }
 );
@@ -212,6 +216,58 @@ export const borrowBook = createAsyncThunk<
         return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });
+
+export const fetchBookById = createAsyncThunk<
+    ReceivingBook, // response type
+    string,        // bookId
+    { rejectValue: string }
+>("books/fetchBookById", async (bookId, thunkAPI) => {
+    try {
+        const response = await axiosInstance.get<ReceivingBook>(`/resources/book/${bookId}`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+export const createBook = createAsyncThunk<
+    string, // or BookResponse if needed
+    FormData,
+    { rejectValue: string }
+>("books/createBook", async (formData, thunkAPI) => {
+    try {
+        const response = await axiosInstance.post("/resources/book/create", formData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token") || ""}`
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+
+export const updateBook = createAsyncThunk<
+    string, // success message or response DTO
+    { bookId: string; updatedData: FormData },
+    { rejectValue: string }
+>(
+    'books/updateBook',
+    async ({ bookId, updatedData }, thunkAPI) => {
+        try {
+            const response = await axiosInstance.put(`/resources/book/${bookId}/update`, updatedData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token") || ""}`
+                },
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(getErrorMessage(error));
+        }
+    }
+);
+
 
 const bookSlice = createSlice({
     name: "books",
@@ -326,7 +382,7 @@ const bookSlice = createSlice({
             })
             .addCase(searchBooks.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.payload || "Unknown error";
+                state.error = (action.payload as string) || "Search books failed";
             })
             .addCase(borrowBook.pending, (state) => {
             state.status = "loading";
@@ -339,7 +395,45 @@ const bookSlice = createSlice({
             .addCase(borrowBook.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload || "Borrowing failed";
-            });
+            })
+            .addCase(fetchBookById.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(fetchBookById.fulfilled, (state, action) => {
+                state.fetchedBook = action.payload;
+                state.status = "succeeded";
+            })
+            .addCase(fetchBookById.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Fetching book by ID failed";
+            })
+            .addCase(createBook.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(createBook.fulfilled, (state) => {
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(createBook.rejected, (state, action) => {
+                console.error("Book creation failed:", action.payload);
+                state.status = "failed";
+                state.error = action.payload || "Creating book failed";
+            })
+            .addCase(updateBook.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(updateBook.fulfilled, (state) => {
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(updateBook.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = (action.payload as string) || "Updating book failed";
+            })
+        ;
     },
 });
 

@@ -1,6 +1,6 @@
 import {
     Dialog,
-    DialogContent,
+    DialogContent, DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -38,11 +38,11 @@ const TableAction = ({ id, title, status }: TableActionProps) => {
                 <DialogHeader>
                     <DialogTitle>{isOverdue ? "Pay Overdue Fine" : "Extend Loan"}</DialogTitle>
                 </DialogHeader>
-                <p className="text-sm text-gray-300">
+                <DialogDescription className="text-sm text-gray-300">
                     {isOverdue
                         ? `This loan is overdue. Are you sure you want to pay the fine for "${title}"?`
                         : `Are you sure you want to extend the loan for "${title}"?`}
-                </p>
+                </DialogDescription>
                 <DialogFooter className="mt-4">
                     <Button variant="secondary" onClick={() => setOpenDialogId(null)}>
                         Cancel
