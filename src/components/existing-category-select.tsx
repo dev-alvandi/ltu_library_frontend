@@ -1,30 +1,28 @@
 import {
     Select,
     SelectContent,
+    SelectItem,
     SelectTrigger,
     SelectValue,
-    SelectItem,
 } from "@/components/ui/select.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
-import { allBooksFilters } from "@/store/bookSlice.ts";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import {useDebouncedValue} from "@/hooks/use-debounced-value.ts";
+import { allBooksFilters } from "@/store/bookSlice.ts";
+import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
 import capitalizer from "@/utils/capitalizer.ts";
 
-type Category = Record<string, number>;
-
-interface CategorySelectProps {
+interface ExistingCategorySelectProps {
     value: string;
     onChange: (value: string) => void;
 }
 
-const CategorySelect = ({ value, onChange }: CategorySelectProps) => {
+const ExistingCategorySelect = ({ value, onChange }: ExistingCategorySelectProps) => {
     const dispatch = useAppDispatch();
     const { categories: fetchedCategories } = useAppSelector((state) => state.book);
 
-    const [categories, setCategories] = useState<Category>({});
+    const [categories, setCategories] = useState<Record<string, number>>({});
     const [newCategory, setNewCategory] = useState("");
 
     useEffect(() => {
@@ -71,13 +69,13 @@ const CategorySelect = ({ value, onChange }: CategorySelectProps) => {
             </SelectTrigger>
 
             <SelectContent className="p-0">
-                {/* Fixed Input Area */}
+                {/* Top Input */}
                 <div className="sticky top-0 z-10 bg-white p-2 border-b space-y-2">
                     <Input
                         placeholder="New category..."
                         value={newCategory}
                         onChange={(e) => setNewCategory(capitalizer(e.target.value))}
-                        onKeyDown={(e) => e.stopPropagation()} // Keeps focus in the input
+                        onKeyDown={(e) => e.stopPropagation()} // Keep input editable inside dropdown
                     />
                     <Button
                         className="w-full"
@@ -90,7 +88,7 @@ const CategorySelect = ({ value, onChange }: CategorySelectProps) => {
                     </Button>
                 </div>
 
-                {/* Scrollable Select Items */}
+                {/* Scrollable List */}
                 <div className="max-h-40 overflow-y-auto">
                     {(debouncedNewCategory.trim() ? similarCategories : categoryNames).map(
                         (cat) => (
@@ -105,4 +103,4 @@ const CategorySelect = ({ value, onChange }: CategorySelectProps) => {
     );
 };
 
-export default CategorySelect;
+export default ExistingCategorySelect;

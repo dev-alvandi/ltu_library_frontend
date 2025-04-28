@@ -8,8 +8,6 @@ import RoleBasedRoutes from "@/pages/dashboard/role-based-routes.tsx";
 const Dashboard = () => {
     const user = useAppSelector((state) => state.auth.user);
 
-    console.log(user)
-
     return (
         <div className="grid grid-cols-12 h-[calc(100vh-5rem)]">
             {/* Desktop Static Sidebar */}

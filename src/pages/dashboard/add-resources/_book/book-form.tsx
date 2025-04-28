@@ -2,8 +2,8 @@ import {useFormik} from "formik";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import ImageUploader from "@/components/image-uploader.tsx";
-import CategorySelect from "@/components/category-select.tsx";
-import LanguageSelect from "@/components/language-select.tsx";
+import ExistingCategorySelect from "@/components/existing-category-select.tsx";
+import ExistingLanguageSelect from "@/components/existing-language-select.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
 import {createBook} from "@/store/bookSlice.ts";
@@ -149,7 +149,7 @@ const BookForm = () => {
 
                 <div className="flex flex-col gap-1">
                     <label htmlFor="language">Language</label>
-                    <LanguageSelect
+                    <ExistingLanguageSelect
                         value={formik.values.language}
                         onChange={(val) => formik.setFieldValue("language", val)}
                     />
@@ -157,7 +157,7 @@ const BookForm = () => {
 
                 <div className="flex flex-col gap-1">
                     <label htmlFor="category">Category</label>
-                    <CategorySelect
+                    <ExistingCategorySelect
                         value={formik.values.category}
                         onChange={(val) => formik.setFieldValue("category", val)}
                     />

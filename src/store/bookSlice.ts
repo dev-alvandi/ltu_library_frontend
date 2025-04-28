@@ -268,6 +268,20 @@ export const updateBook = createAsyncThunk<
     }
 );
 
+export const deleteBook = createAsyncThunk<
+    string, // response type
+    string,        // bookId
+    { rejectValue: string }
+>("books/deleteBook", async (bookId, thunkAPI) => {
+    try {
+        const response = await axiosInstance.delete(`/resources/book/${bookId}`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+
 
 const bookSlice = createSlice({
     name: "books",
@@ -432,6 +446,17 @@ const bookSlice = createSlice({
             .addCase(updateBook.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = (action.payload as string) || "Updating book failed";
+            })
+            .addCase(deleteBook.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(deleteBook.fulfilled, (state) => {
+                state.status = "succeeded";
+            })
+            .addCase(deleteBook.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Fetching book by ID failed";
             })
         ;
     },

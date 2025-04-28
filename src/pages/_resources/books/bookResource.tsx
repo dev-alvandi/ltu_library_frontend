@@ -116,43 +116,54 @@ const BookResource = ({ book, userType }: Props) => {
                     </div>
                 </div>
 
-                <div className="mt-4 flex justify-between gap-4">
-                    <Dialog open={open} onOpenChange={setOpen}>
-                        <DialogTrigger asChild>
-                            <Button
-                                variant="default"
-                                className={cn(!["LIBRARIAN", "ADMIN"].includes(userType) && "w-full" , "relative h-12 overflow-hidden group text-white font-semibold cursor-pointer")}
-                            >
-                                {isBorrowable ? "Borrow" : "Reserve"}
-                                {/*/!* Original label *!/*/}
-                                {/*<span className="absolute inset-0 flex items-center justify-center transform transition-transform duration-300 group-hover:-translate-y-full">*/}
-                                {/*    {isBorrowable ? "Borrow" : "Reserve"}*/}
-                                {/*</span>*/}
-                                {/*/!* Hover label *!/*/}
-                                {/*<span className="absolute inset-0 flex items-center justify-center transform translate-y-full transition-transform duration-300 group-hover:translate-y-0">*/}
-                                {/*    Add to Cart*/}
-                                {/*</span>*/}
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-[#030712] border-0">
-                            <DialogHeader>
-                                <DialogTitle>
-                                    {isBorrowable ? "Confirm Borrowing" : "Confirm Reservation"}
-                                </DialogTitle>
-                            </DialogHeader>
-                            <DialogDescription className="text-gray-300">
-                                Are you sure you want to {isBorrowable ? "borrow" : "reserve"} "{book.title}"?
-                            </DialogDescription>
-                            <DialogFooter className="mt-4">
-                                <Button className="cursor-pointer" variant="destructive" onClick={() => setOpen(false)}>
-                                    Cancel
+                <div
+                    className={cn(
+                        "mt-4 flex",
+                        book.numberOfCopies > 0 && ["LIBRARIAN", "ADMIN"].includes(userType)
+                            ? "justify-between"
+                            : "justify-center"
+                    )}
+                >
+                    {book.numberOfCopies > 0  && (
+                        <Dialog open={open} onOpenChange={setOpen}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    variant="default"
+                                    className={cn(!["LIBRARIAN", "ADMIN"].includes(userType) && "w-full" , "relative h-12 overflow-hidden group text-white font-semibold cursor-pointer")}
+                                    onClick={() => !auth.user && navigate(UNAUTHENTICATED_NAVBAR_PATHS["Login | Register"])}
+                                >
+                                    {isBorrowable ? "Borrow" : "Reserve"}
+                                    {/*/!* Original label *!/*/}
+                                    {/*<span className="absolute inset-0 flex items-center justify-center transform transition-transform duration-300 group-hover:-translate-y-full">*/}
+                                    {/*    {isBorrowable ? "Borrow" : "Reserve"}*/}
+                                    {/*</span>*/}
+                                    {/*/!* Hover label *!/*/}
+                                    {/*<span className="absolute inset-0 flex items-center justify-center transform translate-y-full transition-transform duration-300 group-hover:translate-y-0">*/}
+                                    {/*    Add to Cart*/}
+                                    {/*</span>*/}
                                 </Button>
-                                <Button className="cursor-pointer" variant="default" onClick={handleConfirmedAction}>
-                                    Confirm
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+                            </DialogTrigger>
+                            <DialogContent className="bg-[#030712] border-0">
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        {isBorrowable ? "Confirm Borrowing" : "Confirm Reservation"}
+                                    </DialogTitle>
+                                </DialogHeader>
+                                <DialogDescription className="text-gray-300">
+                                    Are you sure you want to {isBorrowable ? "borrow" : "reserve"} "{book.title}"?
+                                </DialogDescription>
+                                <DialogFooter className="mt-4">
+                                    <Button className="cursor-pointer" variant="destructive" onClick={() => setOpen(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button className="cursor-pointer" variant="default" onClick={handleConfirmedAction}>
+                                        Confirm
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    )}
+
                     {userType && ["LIBRARIAN", "ADMIN"].includes(userType) && (
                         <Button
                             variant="default"

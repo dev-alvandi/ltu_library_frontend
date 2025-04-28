@@ -1,11 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/store/store";
+import {useAppDispatch, useAppSelector} from "@/store/store";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import validator from "validator";
+import {updateProfile} from "@/store/userSlice.ts";
+import {User} from "@/types/entitiesType.ts";
+import {toast} from "react-toastify";
 
 const profileInfoSchema = z.object({
     firstName: z.string().min(1, "Required").max(100),
@@ -21,6 +24,8 @@ const profileInfoSchema = z.object({
 
 const UpdateProfileForm = () => {
     const { user } = useAppSelector((state) => state.auth);
+    const { status } = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
 
     const [initialValues, setInitialValues] = useState({
         firstName: "",
@@ -46,8 +51,15 @@ const UpdateProfileForm = () => {
         }
     }, [user]);
 
-    const handleSubmit = (values: typeof initialValues) => {
+    const handleSubmit = async (values: typeof initialValues) => {
         console.log("Updated profile info:", values);
+        await dispatch(updateProfile(values as User));
+
+        if (status === "succeeded") {
+            toast.success("Profile updated")
+        } else {
+            toast.error("Something went wrong during updating the profile")
+        }
     };
 
     return (

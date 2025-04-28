@@ -1,4 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import axiosInstance from "@/config/api.ts";
+import {getErrorMessage} from "@/utils/getErrorMessage.ts";
+import {AuthResponse} from "@/store/authSlice.ts";
 
 interface User {
     userId: number;
@@ -20,29 +23,45 @@ interface User {
 
 interface UserState {
     user: User | null;
+    token: string;
     status: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
 }
 
 const initialState: UserState = {
     user: null,
+    token: "",
     status: "idle",
     error: null,
 };
 
-// ✅ Thunk to validate JWT
-// export const isJwtTokenValid = createAsyncThunk<
-//     User, // Success type
-//     void, // No argument
-//     { rejectValue: string } // Custom error return
-// >("user/isJwtTokenValid", async (_, thunkAPI) => {
-//     try {
-//         const response = await axiosInstance.get<User>(`/auth/is-jwt-valid`);
-//         return response.data;
-//     } catch (error) {
-//         return thunkAPI.rejectWithValue(getErrorMessage(error));
-//     }
-// });
+// Update profile
+export const updateProfile = createAsyncThunk<
+    AuthResponse,
+    User,
+    { rejectValue: string }
+>("user/updateProfile", async (updatedData, thunkAPI) => {
+    try {
+        const response = await axiosInstance.put<AuthResponse>(`/api/user/update-profile`, updatedData);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+// Update password
+export const updatePassword = createAsyncThunk<
+    User,
+    { oldPassword: string; newPassword: string; confirmNewPassword: string },
+    { rejectValue: string }
+>("user/updatePassword", async (passwordData, thunkAPI) => {
+    try {
+        const response = await axiosInstance.put<User>(`/api/user/update-password`, passwordData);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
 
 const userSlice = createSlice({
     name: "user",
@@ -59,25 +78,39 @@ const userSlice = createSlice({
             state.error = null;
         },
     },
-    // extraReducers: (builder) => {
-    //     builder
-    //         .addCase(isJwtTokenValid.pending, (state) => {
-    //             state.status = "loading";
-    //             state.error = null;
-    //         })
-    //         .addCase(isJwtTokenValid.fulfilled, (state, action) => {
-    //             state.user = action.payload;
-    //             state.status = "succeeded";
-    //             state.error = null;
-    //         })
-    //         .addCase(isJwtTokenValid.rejected, (state, action) => {
-    //             state.status = "failed";
-    //             state.user = null;
-    //             localStorage.removeItem("token");
-    //             state.error = action.payload || "Unknown error";
-    //             state.user = null;
-    //         });
-    // },
+    extraReducers: (builder) => {
+        builder
+            .addCase(updateProfile.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(updateProfile.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
+                state.status = "succeeded";
+                state.error = null;
+
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+                localStorage.setItem("token", action.payload.token);
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Updating profile failed.";
+            })
+
+            .addCase(updatePassword.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(updatePassword.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.user = action.payload;
+                state.error = null;
+            })
+            .addCase(updatePassword.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Updating password failed.";
+            })
+    },
 });
 
 export const { setUser, clearUser } = userSlice.actions;

@@ -4,8 +4,8 @@ import {useFormik} from "formik";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import ImageUploader from "@/components/image-uploader";
-import CategorySelect from "@/components/category-select.tsx";
-import LanguageSelect from "@/components/language-select.tsx";
+import ExistingCategorySelect from "@/components/existing-category-select.tsx";
+import ExistingLanguageSelect from "@/components/existing-language-select.tsx";
 import {
     Select,
     SelectContent,
@@ -13,14 +13,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+    Dialog,
+    DialogTrigger,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+    DialogDescription
+} from "@/components/ui/dialog";
 import { useState } from "react";
-import {fetchBookById, updateBook} from "@/store/bookSlice";
+import {deleteBook, fetchBookById, updateBook} from "@/store/bookSlice";
 import {toast} from "react-toastify";
-import BookCopyManage from "@/pages/manage-resources/_book/book-copy-manage.tsx";
+import BookCopyManage from "@/pages/manage-resources/_book/_book-copy/book-copy-manage.tsx";
+import {useNavigate} from "react-router";
+import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 
 const BookManage = ({id}: { id: string }) => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
@@ -75,6 +86,17 @@ const BookManage = ({id}: { id: string }) => {
         dispatch(fetchBookById(id));
     }, [dispatch, id]);
 
+    const handleConfirmDelete = async () => {
+        await dispatch(deleteBook(id));
+
+        if (status === "succeeded") {
+            toast.success("Book deleted");
+            navigate(UNAUTHENTICATED_NAVBAR_PATHS["Books"])
+        } else {
+            toast.error("An error occurred during deleting the book")
+        }
+    }
+
     return (
         <>
             <div className="flex justify-between">
@@ -88,17 +110,11 @@ const BookManage = ({id}: { id: string }) => {
 
                     <DialogContent className="bg-[#030712] text-white border border-[#2a2a2a] rounded-lg">
                         <DialogHeader>
-                            <DialogTitle className="text-lg font-semibold text-red-500">
-                                Confirm Deletion
-                            </DialogTitle>
+                            <DialogTitle className="text-lg font-semibold">Confirm Deletion</DialogTitle>
+                            <DialogDescription className="text-white">
+                                Are you sure you want to delete this book? Deleting will also remove <span className="font-bold">all copies</span>.
+                            </DialogDescription>
                         </DialogHeader>
-
-                        <div className="mt-4 space-y-2">
-                            <p>Are you sure you want to delete this book?</p>
-                            <p className="text-red-400 text-sm">
-                                Warning: Deleting this book will also remove <strong>all its copies</strong> from the database permanently.
-                            </p>
-                        </div>
 
                         <DialogFooter className="pt-4 flex justify-end gap-2">
                             <Button
@@ -110,7 +126,7 @@ const BookManage = ({id}: { id: string }) => {
                             </Button>
                             <Button
                                 variant="destructive"
-                                onClick={() => console.log("Deleting book...")}
+                                onClick={handleConfirmDelete}
                                 className="bg-red-600 hover:bg-red-700"
                             >
                                 Confirm Delete
@@ -203,7 +219,7 @@ const BookManage = ({id}: { id: string }) => {
 
                     <div className="flex flex-col gap-1">
                         <label htmlFor="language">Language</label>
-                        <LanguageSelect
+                        <ExistingLanguageSelect
                             value={formik.values.language}
                             onChange={(val) => formik.setFieldValue("language", val)}
                         />
@@ -211,14 +227,14 @@ const BookManage = ({id}: { id: string }) => {
 
                     <div className="flex flex-col gap-1">
                         <label htmlFor="category">Category</label>
-                        <CategorySelect
+                        <ExistingCategorySelect
                             value={formik.values.category}
                             onChange={(val) => formik.setFieldValue("category", val)}
                         />
                     </div>
                 </div>
 
-                <Button type="submit" className="w-full mt-2 col-span-2">
+                <Button type="submit" className="w-full mt-2 col-span-2 bg-blue-600 hover:bg-blue-700">
                     Update Book
                 </Button>
             </form>

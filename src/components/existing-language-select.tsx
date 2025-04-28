@@ -8,23 +8,21 @@ import {
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
-import { allBooksFilters } from "@/store/bookSlice.ts";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
+import { allBooksFilters } from "@/store/bookSlice.ts";
 import capitalizer from "@/utils/capitalizer.ts";
 
-type Language = Record<string, number>;
-
-interface LanguageSelectProps {
+interface ExistingLanguageSelectProps {
     value: string;
     onChange: (value: string) => void;
 }
 
-const LanguageSelect = ({ value, onChange }: LanguageSelectProps) => {
+const ExistingLanguageSelect = ({ value, onChange }: ExistingLanguageSelectProps) => {
     const dispatch = useAppDispatch();
     const { languages: fetchedLanguages } = useAppSelector((state) => state.book);
 
-    const [languages, setLanguages] = useState<Language>({});
+    const [languages, setLanguages] = useState<Record<string, number>>({});
     const [newLanguage, setNewLanguage] = useState("");
 
     useEffect(() => {
@@ -55,7 +53,7 @@ const LanguageSelect = ({ value, onChange }: LanguageSelectProps) => {
         if (trimmed && !alreadyExists) {
             setLanguages((prev) => ({
                 ...prev,
-                [trimmed]: -1,
+                [trimmed]: -1, // You use -1 for newly added local-only languages
             }));
             onChange(trimmed);
             setNewLanguage("");
@@ -71,13 +69,13 @@ const LanguageSelect = ({ value, onChange }: LanguageSelectProps) => {
             </SelectTrigger>
 
             <SelectContent className="p-0">
-                {/* Fixed Input Area */}
+                {/* Language Input at the Top */}
                 <div className="sticky top-0 z-10 bg-white p-2 border-b space-y-2">
                     <Input
                         placeholder="New language..."
                         value={newLanguage}
                         onChange={(e) => setNewLanguage(capitalizer(e.target.value))}
-                        onKeyDown={(e) => e.stopPropagation()} // Keeps focus in the input
+                        onKeyDown={(e) => e.stopPropagation()} // Keep focus in the input
                     />
                     <Button
                         className="w-full"
@@ -90,7 +88,7 @@ const LanguageSelect = ({ value, onChange }: LanguageSelectProps) => {
                     </Button>
                 </div>
 
-                {/* Scrollable Select Items */}
+                {/* Language List */}
                 <div className="max-h-40 overflow-y-auto">
                     {(debouncedNewLanguage.trim() ? similarLanguages : languageNames).map(
                         (lang) => (
@@ -105,4 +103,4 @@ const LanguageSelect = ({ value, onChange }: LanguageSelectProps) => {
     );
 };
 
-export default LanguageSelect;
+export default ExistingLanguageSelect;

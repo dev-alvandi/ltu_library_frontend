@@ -95,7 +95,7 @@ const BookResourceGrid = ({results, resourceName, currentPage, setCurrentPage, u
                     {getPageRange().map((page) => (
                         <PaginationItem key={page}>
                             <PaginationLink
-                                className="cursor-pointer"
+                                className="cursor-pointer text-black"
                                 onClick={() => handlePageChange(page)}
                                 isActive={currentPage === page}
                             >
