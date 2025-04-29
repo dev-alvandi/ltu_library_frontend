@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import { fetchAllLanguages } from "@/store/bookSlice.ts"; // <- you might need to add this thunk
+import { getAllLanguages } from "@/store/bookSlice.ts";
 import capitalizer from "@/utils/capitalizer.ts";
 
 interface AllLanguagesSelectProps {
@@ -20,32 +20,38 @@ interface AllLanguagesSelectProps {
 
 const AllLanguagesSelect = ({ value, onChange }: AllLanguagesSelectProps) => {
     const dispatch = useAppDispatch();
-    const { allLanguages } = useAppSelector((state) => state.book);
+    const { allLanguages: fetchedLanguages } = useAppSelector((state) => state.book);
 
+    const [languages, setLanguages] = useState<string[]>([]);
     const [newLanguage, setNewLanguage] = useState("");
 
     useEffect(() => {
-        dispatch(fetchAllLanguages()); // <- you should already have or quickly add this
+        dispatch(getAllLanguages());
     }, [dispatch]);
+
+    useEffect(() => {
+        setLanguages(fetchedLanguages);
+    }, [fetchedLanguages]);
 
     const debouncedNewLanguage = useDebouncedValue(newLanguage, 200);
 
     const similarLanguages = useMemo(() => {
         const lower = debouncedNewLanguage.toLowerCase();
-        return allLanguages.filter(
+        return languages.filter(
             (lang) => lang.toLowerCase().includes(lower) && lower.length > 0
         );
-    }, [debouncedNewLanguage, allLanguages]);
+    }, [debouncedNewLanguage, languages]);
 
-    const alreadyExists = allLanguages.some(
+    const alreadyExists = languages.some(
         (lang) => lang.toLowerCase() === newLanguage.trim().toLowerCase()
     );
 
     const handleAddLanguage = () => {
         const trimmed = newLanguage.trim();
         if (trimmed && !alreadyExists) {
-            onChange(trimmed);
-            setNewLanguage("");
+            setLanguages((prev) => [...prev, trimmed]);  // ✅ Update the local list
+            onChange(trimmed);                            // ✅ Update selected value
+            setNewLanguage("");                           // ✅ Clear input
         }
     };
 
@@ -56,7 +62,7 @@ const AllLanguagesSelect = ({ value, onChange }: AllLanguagesSelectProps) => {
             </SelectTrigger>
 
             <SelectContent className="p-0">
-                {/* Fixed Input Area */}
+                {/* Input Area */}
                 <div className="sticky top-0 z-10 bg-white p-2 border-b space-y-2">
                     <Input
                         placeholder="New language..."
@@ -75,9 +81,9 @@ const AllLanguagesSelect = ({ value, onChange }: AllLanguagesSelectProps) => {
                     </Button>
                 </div>
 
-                {/* Scrollable Select Items */}
+                {/* List */}
                 <div className="max-h-40 overflow-y-auto">
-                    {(debouncedNewLanguage.trim() ? similarLanguages : allLanguages).map((lang) => (
+                    {(debouncedNewLanguage.trim() ? similarLanguages : languages).map((lang) => (
                         <SelectItem key={lang} value={lang}>
                             {lang}
                         </SelectItem>

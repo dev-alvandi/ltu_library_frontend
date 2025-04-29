@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {AuthValues} from "@/pages/auth/type.ts";
 import axiosInstance, {API_BASE_URL} from "@/config/api.ts";
@@ -69,6 +69,18 @@ export const resetPassword = createAsyncThunk<AuthResponse, PasswordResetValues,
     }
 );
 
+export const deleteAccount = createAsyncThunk<string, void, { rejectValue: string }>(
+    'auth/deleteAccount',
+    async (_, thunkAPI) => {
+        try {
+            const response = await axiosInstance.delete(`${API_BASE_URL}/auth/delete-account`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(getErrorMessage(error));
+        }
+    }
+);
+
 export const isJwtTokenValid = createAsyncThunk<
     User, // Success type
     void, // No argument
@@ -121,9 +133,9 @@ const authSlice = createSlice({
                 state.resetStatus = 'succeeded';
                 state.error = null;
             })
-             .addCase(resetPassword.fulfilled, (state) => {
-                 state.resetStatus = 'succeeded';
-                 state.error = null;
+            .addCase(resetPassword.fulfilled, (state) => {
+                state.resetStatus = 'succeeded';
+                state.error = null;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.registerStatus = 'failed';
@@ -170,14 +182,30 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(isJwtTokenValid.rejected, (state, action) => {
+                localStorage.removeItem("token");
+
                 state.authenticationStatus = "failed";
                 state.user = null;
-                localStorage.removeItem("token");
                 state.error = action.payload || "Unknown error";
+            })
+
+
+            .addCase(deleteAccount.pending, (state) => {
+                state.authenticationStatus = "loading";
+                state.error = null;
+            })
+            .addCase(deleteAccount.fulfilled, (state) => {
                 state.user = null;
+                state.token= ""
+                localStorage.removeItem("token");
+
+                state.error = null;
+            })
+            .addCase(deleteAccount.rejected, (state, action) => {
+                state.error = action.payload || "Unknown error";
             })
     },
 });
 
-export const { logout } = authSlice.actions;
+export const {logout} = authSlice.actions;
 export default authSlice.reducer;

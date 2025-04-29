@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import { fetchAllCategories } from "@/store/bookSlice.ts"; //
+import { getAllCategories } from "@/store/bookSlice.ts";
 import capitalizer from "@/utils/capitalizer.ts";
 
 interface AllCategoriesSelectProps {
@@ -20,32 +20,38 @@ interface AllCategoriesSelectProps {
 
 const AllCategoriesSelect = ({ value, onChange }: AllCategoriesSelectProps) => {
     const dispatch = useAppDispatch();
-    const { allCategories } = useAppSelector((state) => state.book);
+    const { allCategories: fetchedCategories } = useAppSelector((state) => state.book);
 
+    const [categories, setCategories] = useState<string[]>([]);
     const [newCategory, setNewCategory] = useState("");
 
     useEffect(() => {
-        dispatch(fetchAllCategories()); // Dispatch to fetch all categories from backend
+        dispatch(getAllCategories());
     }, [dispatch]);
+
+    useEffect(() => {
+        setCategories(fetchedCategories);
+    }, [fetchedCategories]);
 
     const debouncedNewCategory = useDebouncedValue(newCategory, 200);
 
     const similarCategories = useMemo(() => {
         const lower = debouncedNewCategory.toLowerCase();
-        return allCategories.filter(
+        return categories.filter(
             (cat) => cat.toLowerCase().includes(lower) && lower.length > 0
         );
-    }, [debouncedNewCategory, allCategories]);
+    }, [debouncedNewCategory, categories]);
 
-    const alreadyExists = allCategories.some(
+    const alreadyExists = categories.some(
         (cat) => cat.toLowerCase() === newCategory.trim().toLowerCase()
     );
 
     const handleAddCategory = () => {
         const trimmed = newCategory.trim();
         if (trimmed && !alreadyExists) {
-            onChange(trimmed);
-            setNewCategory("");
+            setCategories((prev) => [...prev, trimmed]);  // ✅ Add locally
+            onChange(trimmed);                             // ✅ Select immediately
+            setNewCategory("");                            // ✅ Clear input
         }
     };
 
@@ -56,7 +62,7 @@ const AllCategoriesSelect = ({ value, onChange }: AllCategoriesSelectProps) => {
             </SelectTrigger>
 
             <SelectContent className="p-0">
-                {/* Fixed Input Area */}
+                {/* Input Area */}
                 <div className="sticky top-0 z-10 bg-white p-2 border-b space-y-2">
                     <Input
                         placeholder="New category..."
@@ -75,9 +81,9 @@ const AllCategoriesSelect = ({ value, onChange }: AllCategoriesSelectProps) => {
                     </Button>
                 </div>
 
-                {/* Scrollable Select Items */}
+                {/* List */}
                 <div className="max-h-40 overflow-y-auto">
-                    {(debouncedNewCategory.trim() ? similarCategories : allCategories).map((cat) => (
+                    {(debouncedNewCategory.trim() ? similarCategories : categories).map((cat) => (
                         <SelectItem key={cat} value={cat}>
                             {cat}
                         </SelectItem>

@@ -6,7 +6,7 @@ import { BookOpen, User } from "lucide-react";
 const Home = () => {
 
     return (
-        <main className="flex flex-col items-center justify-center min-h-[80vh] px-6 py-12 bg-background text-foreground space-y-8">
+        <main className="flex flex-col items-center justify-center min-h-[80vh] px-6 py-12 bg-transparent text-foreground space-y-8">
             <Card className="w-full max-w-3xl shadow-2xl rounded-2xl bg-card border-muted p-6 text-center space-y-6">
                 <h1 className="text-4xl font-bold libre-baskerville text-[--color-blue-theme]">
                     Welcome to Luleå University Library

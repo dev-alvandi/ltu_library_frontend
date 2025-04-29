@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/navbar.tsx";
+import Footer from "@/components/footer.tsx";
 
 const Layout = () => {
     return (
@@ -8,6 +9,7 @@ const Layout = () => {
             <main className="mt-20">
                 <Outlet />
             </main>
+            <Footer />
         </div>
     );
 };

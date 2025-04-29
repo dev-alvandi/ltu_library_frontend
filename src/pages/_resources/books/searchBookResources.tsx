@@ -49,6 +49,7 @@ const SearchBookResources = ({resource}: { resource: string }) => {
     } = useAppSelector(state => state.book);
 
     const userType = useAppSelector((state) => state.auth.user?.userType?.toUpperCase().trim());
+    const { status: userSliceStatus } = useAppSelector((state) => state.user);
 
     const [userFilters, setUserFilters] = useState<FILTERS_TYPE>(defaultFilters);
     const [searchTerm, setSearchTerm] = useState("");
@@ -67,8 +68,7 @@ const SearchBookResources = ({resource}: { resource: string }) => {
         } else {
             dispatch(getAllBooks(pageIndex));
         }
-    }, [dispatch, searchTerm, userFilters, currentPage]);
-
+    }, [dispatch, searchTerm, userFilters, currentPage, userSliceStatus]);
 
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import TableAction from "./table-action";
+import {ReservationResponse} from "@/store/userSlice.ts";
 
 export interface Reservation {
     id: number;
@@ -13,8 +14,8 @@ export interface Reservation {
 }
 
 interface TableReservationProps {
-    reservations: Reservation[];
-    onRemove: (id: number) => void;
+    reservations: ReservationResponse[];
+    onRemove: (id: string) => void;
 }
 
 const TableReservation = ({ reservations, onRemove }: TableReservationProps) => {
@@ -32,7 +33,7 @@ const TableReservation = ({ reservations, onRemove }: TableReservationProps) => 
             <TableBody>
                 {reservations.map((res) => (
                     <TableRow
-                        key={res.id}
+                        key={res.reservationId}
                         className="hover:bg-[#2e2e35] transition border-b border-[#2a2a2a] text-center"
                     >
                         <TableCell>
@@ -52,7 +53,7 @@ const TableReservation = ({ reservations, onRemove }: TableReservationProps) => 
                             </Badge>
                         </TableCell>
                         <TableCell>
-                            <TableAction id={res.id} title={res.title} onRemove={onRemove} />
+                            <TableAction id={res.reservationId} title={res.title} onRemove={onRemove} />
                         </TableCell>
                     </TableRow>
                 ))}

@@ -15,9 +15,9 @@ import {
     DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import {borrowBook} from "@/store/bookSlice.ts";
 import {useDispatch} from "react-redux";
 import {cn} from "@/lib/utils.ts";
+import {borrowBook} from "@/store/userSlice.ts";
 
 interface Props {
     book: Pick<
@@ -59,6 +59,7 @@ const BookResource = ({ book, userType }: Props) => {
                 }
 
             } else {
+                // here!!!!!!!!!!!!!!
                 toast.info(`Successfully reserved book!`);
             }
         } else {

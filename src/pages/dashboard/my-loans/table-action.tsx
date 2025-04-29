@@ -10,18 +10,18 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 interface TableActionProps {
-    id: number;
+    id: string;
     title: string;
     status: "RETURNED" | "NOT_RETURNED" | "OVERDUE";
 }
 
 const TableAction = ({ id, title, status }: TableActionProps) => {
-    const [openDialogId, setOpenDialogId] = useState<number | null>(null);
+    const [openDialogId, setOpenDialogId] = useState<string | null>(null);
     const isDialogOpen = openDialogId === id;
 
-    if (status === "RETURNED") return null;
+    if (status) return null;
 
-    const isOverdue = status === "OVERDUE";
+    const isOverdue = !status;
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={(open) => setOpenDialogId(open ? id : null)}>

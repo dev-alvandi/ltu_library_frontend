@@ -18,7 +18,7 @@ const AUTHENTICATED_NAVBAR_PATHS = {
     "Dashboard": "/dashboard",
     // "Edit Resources": "/edit-resources",
     "Contact Us": "/contact-us",
-    "Logout": "/"
+    "Logout": "/auth"
 }
 
 type AUTHENTICATED_NAVBAR_PATHS_TYPE = typeof AUTHENTICATED_NAVBAR_PATHS;

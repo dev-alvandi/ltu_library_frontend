@@ -24,7 +24,6 @@ const profileInfoSchema = z.object({
 
 const UpdateProfileForm = () => {
     const { user } = useAppSelector((state) => state.auth);
-    const { status } = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
 
     const [initialValues, setInitialValues] = useState({
@@ -53,13 +52,14 @@ const UpdateProfileForm = () => {
 
     const handleSubmit = async (values: typeof initialValues) => {
         console.log("Updated profile info:", values);
-        await dispatch(updateProfile(values as User));
+        const result = await dispatch(updateProfile(values as User));
 
-        if (status === "succeeded") {
-            toast.success("Profile updated")
+        if (updateProfile.fulfilled.match(result)) {
+            toast.success("Profile updated");
         } else {
-            toast.error("Something went wrong during updating the profile")
+            toast.error("Something went wrong during updating the profile");
         }
+
     };
 
     return (

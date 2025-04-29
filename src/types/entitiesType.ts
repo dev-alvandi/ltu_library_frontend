@@ -32,6 +32,65 @@ export type ReceivingBook = {
     };
 };
 
+export interface PaginationResponse<T> {
+    content: T[];
+    empty: boolean;
+    first: boolean;
+    last: boolean;
+    number: number;
+    numberOfElements: number;
+    pageable: {
+        pageNumber: number;
+        pageSize: number;
+        sort: {
+            sorted: boolean;
+            unsorted: boolean;
+            empty: boolean;
+        };
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+    };
+    size: number;
+    sort: {
+        sorted: boolean;
+        unsorted: boolean;
+        empty: boolean;
+    };
+    totalElements: number;
+    totalPages: number;
+}
+
+export const createInitialPaginationResponse = <T>(size: number): PaginationResponse<T> => ({
+    content: [],
+    empty: true,
+    first: true,
+    last: true,
+    number: 0,
+    numberOfElements: 0,
+    pageable: {
+        pageNumber: 0,
+        pageSize: size,
+        sort: {
+            sorted: false,
+            unsorted: true,
+            empty: true,
+        },
+        offset: 0,
+        paged: false,
+        unpaged: true,
+    },
+    size: size,
+    sort: {
+        sorted: false,
+        unsorted: true,
+        empty: true,
+    },
+    totalElements: 0,
+    totalPages: 0,
+});
+
+
 export type SendingBook = {
     bookId: string;
     title: string;

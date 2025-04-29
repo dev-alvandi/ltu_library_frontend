@@ -2,18 +2,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import TableAction from "./table-action";
-
-interface Loan {
-    id: number;
-    imageUrl: string;
-    title: string;
-    borrowedAt: Date;
-    dueDate: Date;
-    status: "RETURNED" | "NOT_RETURNED" | "OVERDUE";
-}
+import {LoanItemResponse} from "@/store/userSlice.ts";
 
 interface TableLoanProps {
-    loans: Loan[];
+    loans: LoanItemResponse[];
 }
 
 const TableLoan = ({ loans }: TableLoanProps) => {
@@ -32,7 +24,7 @@ const TableLoan = ({ loans }: TableLoanProps) => {
             <TableBody>
                 {loans.map((loan) => (
                     <TableRow
-                        key={loan.id}
+                        key={loan.loanItemId}
                         className="hover:bg-[#2e2e35] transition border-b border-[#2a2a2a] text-center"
                     >
                         <TableCell className="py-3">
@@ -47,7 +39,7 @@ const TableLoan = ({ loans }: TableLoanProps) => {
                             {format(loan.borrowedAt, "MMMM d, yyyy")}
                         </TableCell>
                         <TableCell className="text-gray-300">
-                            {format(loan.dueDate, "MMMM d, yyyy")}
+                            {format(loan.dueAt, "MMMM d, yyyy")}
                         </TableCell>
                         <TableCell>
                             <Badge
@@ -67,7 +59,7 @@ const TableLoan = ({ loans }: TableLoanProps) => {
                             </Badge>
                         </TableCell>
                         <TableCell>
-                            <TableAction id={loan.id} title={loan.title} status={loan.status} />
+                            <TableAction id={loan.loanItemId} title={loan.title} status={loan.status} />
                         </TableCell>
                     </TableRow>
                 ))}

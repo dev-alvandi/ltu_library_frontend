@@ -55,6 +55,10 @@ export interface PaginationBookResponse {
     totalPages: number;
 }
 
+interface AllLanguagesAndCategories {
+    categories: string[],
+    languages: string[]
+}
 
 const initialPaginationBookResponse = {
     content: [],
@@ -96,6 +100,9 @@ interface BookState {
     error: string | null;
     suggestions: Suggestions;
     fetchedBook: ReceivingBook | null;
+    allLanguagesAndCategories: AllLanguagesAndCategories;
+    allLanguages: string[];
+    allCategories: string[];
 }
 
 
@@ -116,7 +123,14 @@ const initialState: BookState = {
         author: [],
         publisher: [],
     },
-    fetchedBook: null
+    fetchedBook: null,
+    allLanguagesAndCategories: {
+        categories: [],
+        languages: []
+    },
+
+    allLanguages: [],
+    allCategories: []
 };
 
 export const getAllBooks = createAsyncThunk<PaginationBookResponse, number, { rejectValue: string }>(
@@ -203,19 +217,7 @@ export const searchBooks = createAsyncThunk<
     }
 );
 
-export const borrowBook = createAsyncThunk<
-    string, // success message or response DTO
-    string, // bookId
-    { rejectValue: string }
->("books/borrowBook", async (bookId, thunkAPI) => {
-    try {
-        const response = await axiosInstance.post(`/resources/borrow/${bookId}`);
-        thunkAPI.dispatch(bookSlice.actions.updateBookByBookIdUponSuccessfulBorrow(response.data.book.bookId));
-        return response.data.message || "Book borrowed successfully";
-    } catch (error) {
-        return thunkAPI.rejectWithValue(getErrorMessage(error));
-    }
-});
+
 
 export const fetchBookById = createAsyncThunk<
     ReceivingBook, // response type
@@ -281,7 +283,44 @@ export const deleteBook = createAsyncThunk<
     }
 });
 
+export const getAllLanguagesAndCategories = createAsyncThunk<
+    AllLanguagesAndCategories, // response type
+    void,
+    { rejectValue: string }
+>("books/getAllLanguagesAndCategories", async (_, thunkAPI) => {
+    try {
+        const response = await axiosInstance.get<AllLanguagesAndCategories>(`/resources/books-categories-and-languages`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
 
+export const getAllLanguages = createAsyncThunk<
+    string[], // response type
+    void,
+    { rejectValue: string }
+>("books/getAllLanguages", async (_, thunkAPI) => {
+    try {
+        const response = await axiosInstance.get<string[]>(`/resources/books-languages`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+export const getAllCategories = createAsyncThunk<
+    string[], // response type
+    void,
+    { rejectValue: string }
+>("books/getAllCategories", async (_, thunkAPI) => {
+    try {
+        const response = await axiosInstance.get<string[]>(`/resources/books-categories`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
 
 const bookSlice = createSlice({
     name: "books",
@@ -324,12 +363,6 @@ const bookSlice = createSlice({
             state.status = "idle";
             state.error = null;
         },
-        updateBookByBookIdUponSuccessfulBorrow: (state, action: PayloadAction<string>) => {
-            const book = state.results?.content.find(b => b.bookId === action.payload);
-            if (book && book.numberOfAvailableToBorrowCopies > 0) {
-                book.numberOfAvailableToBorrowCopies -= 1;
-            }
-        }
     },
     extraReducers: (builder) => {
         builder
@@ -398,18 +431,7 @@ const bookSlice = createSlice({
                 state.status = "failed";
                 state.error = (action.payload as string) || "Search books failed";
             })
-            .addCase(borrowBook.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-            })
-            .addCase(borrowBook.fulfilled, (state) => {
-                state.status = "succeeded";
-                state.error = null;
-            })
-            .addCase(borrowBook.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload || "Borrowing failed";
-            })
+
             .addCase(fetchBookById.pending, (state) => {
                 state.status = "loading";
                 state.error = null;
@@ -457,6 +479,49 @@ const bookSlice = createSlice({
             .addCase(deleteBook.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload || "Fetching book by ID failed";
+            })
+
+
+            .addCase(getAllLanguagesAndCategories.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllLanguagesAndCategories.fulfilled, (state, action) => {
+                state.allLanguagesAndCategories = action.payload;
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(getAllLanguagesAndCategories.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Fetching filtered books failed";
+            })
+
+            .addCase(getAllLanguages.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllLanguages.fulfilled, (state, action) => {
+                state.allLanguages = action.payload;
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(getAllLanguages.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Fetching filtered books failed";
+            })
+
+            .addCase(getAllCategories.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllCategories.fulfilled, (state, action) => {
+                state.allCategories = action.payload;
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(getAllCategories.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Fetching filtered books failed";
             })
         ;
     },

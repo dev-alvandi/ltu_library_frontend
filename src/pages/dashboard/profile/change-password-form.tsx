@@ -3,13 +3,16 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toFormikValidationSchema} from "zod-formik-adapter";
 import {z} from "zod";
+import {updatePassword} from "@/store/userSlice.ts";
+import {useAppDispatch} from "@/store/store.ts";
+import {toast} from "react-toastify";
 
 const changePasswordSchema = z.object({
     oldPassword: z.string().min(1, "Required"),
-    password: z.string().min(6, "Too short"),
-    confirmPassword: z.string(),
+    newPassword: z.string().min(6, "Too short"),
+    confirmNewPassword: z.string(),
 }).superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
+    if (data.newPassword !== data.confirmNewPassword) {
         ctx.addIssue({
             path: ["confirmPassword"],
             code: "custom",
@@ -19,14 +22,23 @@ const changePasswordSchema = z.object({
 });
 
 const ChangePasswordForm = () => {
+    const dispatch = useAppDispatch();
+
     const initialValues = {
         oldPassword: "",
-        password: "",
-        confirmPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
     };
 
-    const handleSubmit = (values: typeof initialValues) => {
-        console.log("Password change values:", values);
+    const handleSubmit = async (values: typeof initialValues) => {
+
+        const result = await dispatch(updatePassword(values));
+
+        if (updatePassword.fulfilled.match(result)) {
+            toast.success("Password updated");
+        } else {
+            toast.error("Something went wrong during updating the Password");
+        }
     };
 
     return (
@@ -46,15 +58,15 @@ const ChangePasswordForm = () => {
                         </div>
 
                         <div className="auth-input-style">
-                            <label htmlFor="password" className="auth-label-style">New Password</label>
-                            <Field name="password" as={Input} type="password" className="auth-field-style"/>
-                            <ErrorMessage name="password" component="div" className="text-red-500 text-sm"/>
+                            <label htmlFor="newPassword" className="auth-label-style">New Password</label>
+                            <Field name="newPassword" as={Input} type="password" className="auth-field-style"/>
+                            <ErrorMessage name="newPassword" component="div" className="text-red-500 text-sm"/>
                         </div>
 
                         <div className="auth-input-style">
-                            <label htmlFor="confirmPassword" className="auth-label-style">Confirm Password</label>
-                            <Field name="confirmPassword" as={Input} type="password" className="auth-field-style"/>
-                            <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm"/>
+                            <label htmlFor="confirmNewPassword" className="auth-label-style">Confirm Password</label>
+                            <Field name="confirmNewPassword" as={Input} type="password" className="auth-field-style"/>
+                            <ErrorMessage name="confirmNewPassword" component="div" className="text-red-500 text-sm"/>
                         </div>
 
                         <div className="flex justify-end">

@@ -12,9 +12,9 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 interface TableActionProps {
-    id: number;
+    id: string;
     title: string;
-    onRemove: (id: number) => void;
+    onRemove: (id: string) => void;
 }
 
 const TableAction = ({ id, title, onRemove }: TableActionProps) => {
