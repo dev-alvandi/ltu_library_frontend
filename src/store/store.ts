@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '@/store/authSlice.ts';
-import userReducer from '@/store/userSlice.ts';
-import bookReducer from '@/store/bookSlice.ts';
-import bookCopyReducer from '@/store/bookCopySlice.ts';
-import libraryActionsReducer from '@/store/libraryActionsSlice';
+import authReducer from '@/store/auth-slice.ts';
+import userReducer from '@/store/user-slice.ts';
+import bookReducer from '@/store/book-slice.ts';
+import bookCopyReducer from '@/store/book-copy-slice.ts';
+import libraryActionsReducer from '@/store/library-actions-slice.tsx';
 import {useDispatch, useSelector} from "react-redux";
 
 export const store = configureStore({

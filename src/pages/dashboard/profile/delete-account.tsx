@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useAppDispatch } from "@/store/store";
-import { deleteAccount } from "@/store/authSlice"; // Assuming you will create this thunk
+import { deleteAccount } from "@/store/auth-slice.ts"; // Assuming you will create this thunk
 import { toast } from "react-toastify";
 import {useNavigate} from "react-router";
 import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";

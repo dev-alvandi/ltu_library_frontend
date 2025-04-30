@@ -6,7 +6,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {resetPassword} from "@/store/authSlice.ts";
+import {resetPassword} from "@/store/auth-slice.ts";
 import {toast} from "react-toastify";
 import {useNavigate, useParams} from "react-router";
 

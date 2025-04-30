@@ -39,9 +39,9 @@ const Dashboard = () => {
                         </Sheet>
                     </div>
                 </div>
-                {/*<Separator />*/}
 
                 {user && <RoleBasedRoutes userType={user.userType} />}
+
             </div>
         </div>
     );

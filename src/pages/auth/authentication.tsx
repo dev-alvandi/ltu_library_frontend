@@ -14,7 +14,7 @@ import {format} from "date-fns";
 import {cn} from "@/lib/utils";
 import type {AuthValues, LoginValues, RegisterValues} from "@/pages/auth/type"
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {loginUser, registerUser} from "@/store/authSlice.ts";
+import {loginUser, registerUser} from "@/store/auth-slice.ts";
 import {toast} from "react-toastify";
 import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 

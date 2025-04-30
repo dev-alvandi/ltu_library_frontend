@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import { getAllCategories } from "@/store/bookSlice.ts";
+import { getAllCategories } from "@/store/book-slice.ts";
 
 interface AllCategoriesSelectProps {
     value: string;

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { z, ZodError } from "zod";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import { fetchSuggestions } from "@/store/bookSlice.ts";
+import { fetchSuggestions } from "@/store/book-slice.ts";
 
 const searchSchema = z.object({
     query: z.string().trim().min(1, "Search term required"),

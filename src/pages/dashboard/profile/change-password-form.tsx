@@ -3,7 +3,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toFormikValidationSchema} from "zod-formik-adapter";
 import {z} from "zod";
-import {updatePassword} from "@/store/userSlice.ts";
+import {updatePassword} from "@/store/user-slice.ts";
 import {useAppDispatch} from "@/store/store.ts";
 import {toast} from "react-toastify";
 

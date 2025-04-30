@@ -6,7 +6,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {requestResetPassword} from "@/store/authSlice.ts";
+import {requestResetPassword} from "@/store/auth-slice.ts";
 import {toast} from "react-toastify";
 
 const requestPasswordResetSchemaZod = z.object({

@@ -1,4 +1,4 @@
-import BookForm from "@/pages/dashboard/add-resources/_book/book-form.tsx";
+import BookForm from "@/pages/dashboard/manage-resources/_book/book-form.tsx";
 import {RESOURCE_COPY_TYPES, RESOURCE_TYPES} from "@/pages/dashboard/type.ts";
 
 interface Props {

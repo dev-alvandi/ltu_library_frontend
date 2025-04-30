@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import TableAction from "./table-action";
-import {ReservationResponse} from "@/store/userSlice.ts";
+import {ReservationResponse} from "@/store/user-slice.ts";
 
 export interface Reservation {
     id: number;

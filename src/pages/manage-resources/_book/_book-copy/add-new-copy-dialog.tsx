@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useDispatch } from "react-redux";
-import { createBookCopy, fetchBookCopiesByBookId } from "@/store/bookCopySlice";
+import { createBookCopy, fetchBookCopiesByBookId } from "@/store/book-copy-slice.ts";
 import { toast } from "react-toastify";
 import { Formik, Form } from "formik";
 

@@ -28,7 +28,7 @@ const DASHBOARD_NAVBAR_PATHS = {
     "Profile": "/dashboard/profile",
     "My Loans": "/dashboard/my-loans",
     "My Reservations": "/dashboard/my-reservations",
-    "Add Resources": "/dashboard/add-resources",
+    "Manage Resources": "/dashboard/manage-resources",
     // "Employee Management": "/dashboard/employee-management",
     // "Settings": "/dashboard/settings"
 }

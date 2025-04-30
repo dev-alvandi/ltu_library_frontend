@@ -2,14 +2,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import TableAction from "./table-action";
-import {LoanItemResponse} from "@/store/userSlice.ts";
+import {LoanItemResponse} from "@/store/user-slice.ts";
 
 interface TableLoanProps {
     loans: LoanItemResponse[];
+    onTableAction: (id: string, isOverdue: boolean) => void;
 }
 
-const TableLoan = ({ loans }: TableLoanProps) => {
+const TableLoan = ({ loans, onTableAction }: TableLoanProps) => {
+
     console.log(loans)
+
     return (
         <Table className="text-sm">
             <TableHeader>
@@ -60,7 +63,13 @@ const TableLoan = ({ loans }: TableLoanProps) => {
                             </Badge>
                         </TableCell>
                         <TableCell>
-                            <TableAction id={loan.loanId} title={loan.title} status={loan.status} />
+                            <TableAction
+                                id={loan.loanId}
+                                title={loan.title}
+                                extendable={loan.extendable}
+                                status={loan.status}
+                                onTableAction={onTableAction}
+                            />
                         </TableCell>
                     </TableRow>
                 ))}

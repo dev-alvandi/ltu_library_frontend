@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import TableReservation from "@/pages/dashboard/my-reservations/table-reservation.tsx";
 import PaginationControls from "@/pages/dashboard/my-reservations/pagination-controls.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {fetchUserReservations} from "@/store/userSlice.ts";
+import {fetchUserReservations} from "@/store/user-slice.ts";
 
 
 const MyReservations = () => {

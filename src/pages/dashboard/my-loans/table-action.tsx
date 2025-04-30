@@ -1,6 +1,7 @@
 import {
     Dialog,
-    DialogContent, DialogDescription,
+    DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -12,16 +13,24 @@ import { useState } from "react";
 interface TableActionProps {
     id: string;
     title: string;
+    extendable: boolean
     status: "RETURNED" | "NOT_RETURNED" | "OVERDUE";
+    onTableAction: (id: string, isOverdue: boolean) => void;
 }
 
-const TableAction = ({ id, title, status }: TableActionProps) => {
+const TableAction = ({ id, title, extendable, status, onTableAction }: TableActionProps) => {
+
     const [openDialogId, setOpenDialogId] = useState<string | null>(null);
     const isDialogOpen = openDialogId === id;
 
-    if (status) return null;
+    if (status === "RETURNED" || !extendable) return null;
 
-    const isOverdue = !status;
+    const isOverdue = status === "OVERDUE";
+
+    const handleConfirm = () => {
+        onTableAction(id, isOverdue);
+        setOpenDialogId(null);
+    };
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={(open) => setOpenDialogId(open ? id : null)}>
@@ -47,13 +56,7 @@ const TableAction = ({ id, title, status }: TableActionProps) => {
                     <Button variant="secondary" onClick={() => setOpenDialogId(null)}>
                         Cancel
                     </Button>
-                    <Button
-                        variant="default"
-                        onClick={() => {
-                            console.log(isOverdue ? `Paid fine for: ${title}` : `Extended: ${title}`);
-                            setOpenDialogId(null);
-                        }}
-                    >
+                    <Button variant="default" onClick={handleConfirm}>
                         {isOverdue ? "Pay Now" : "Confirm"}
                     </Button>
                 </DialogFooter>

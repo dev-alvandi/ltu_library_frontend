@@ -11,7 +11,7 @@ const DashboardSideBar = ({userType}: { userType: string }) => {
             path: DASHBOARD_NAVBAR_PATHS["My Reservations"],
             roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC"]
         },
-        {label: "Add Resources", path: DASHBOARD_NAVBAR_PATHS["Add Resources"], roles: ["LIBRARIAN", "ADMIN"]},
+        {label: "Manage Resources", path: DASHBOARD_NAVBAR_PATHS["Manage Resources"], roles: ["LIBRARIAN", "ADMIN"]},
         // {label: "Employee Management", path: DASHBOARD_NAVBAR_PATHS["Employee Management"], roles: ["ADMIN"]},
     ];
 

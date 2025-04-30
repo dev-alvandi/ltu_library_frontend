@@ -5,7 +5,7 @@ import Profile from "@/pages/dashboard/profile/profile.tsx";
 import MyLoans from "@/pages/dashboard/my-loans/my-loans.tsx";
 import MyReservations from "@/pages/dashboard/my-reservations/my-reservations.tsx";
 import {Navigate} from "react-router-dom";
-import AddResources from "@/pages/dashboard/add-resources/add-resources.tsx";
+import ManageResources from "@/pages/dashboard/manage-resources/manage-resources.tsx";
 
 
 const RoleBasedRoutes = ({ userType }: { userType: string }) => {
@@ -29,11 +29,11 @@ const RoleBasedRoutes = ({ userType }: { userType: string }) => {
 
     const librarianRoutes = [
         <Route
-            key="add-resources"
-            path={DASHBOARD_NAVBAR_PATHS["Add Resources"].split("/")[2]}
+            key="manage-resources"
+            path={DASHBOARD_NAVBAR_PATHS["Manage Resources"].split("/")[2]}
             element={
                 <ProtectedRoute allowedRoles={["LIBRARIAN", "ADMIN"]}>
-                    <AddResources />
+                    <ManageResources />
                 </ProtectedRoute>
             }
         />,

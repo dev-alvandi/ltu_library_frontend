@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
-import { allBooksFilters } from "@/store/bookSlice.ts";
+import { allBooksFilters } from "@/store/book-slice.ts";
 import capitalizer from "@/utils/capitalizer.ts";
 
 interface ExistingLanguageSelectProps {

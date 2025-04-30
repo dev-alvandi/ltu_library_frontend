@@ -6,7 +6,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import validator from "validator";
-import {updateProfile} from "@/store/userSlice.ts";
+import {updateProfile} from "@/store/user-slice.ts";
 import {User} from "@/types/entitiesType.ts";
 import {toast} from "react-toastify";
 

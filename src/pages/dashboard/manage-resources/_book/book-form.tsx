@@ -4,7 +4,7 @@ import {Button} from "@/components/ui/button.tsx";
 import ImageUploader from "@/components/image-uploader.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select.tsx";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {createBook} from "@/store/bookSlice.ts";
+import {createBook} from "@/store/book-slice.ts";
 import {toast} from "react-toastify";
 import {useEffect, useState} from "react";
 import AllLanguagesSelect from "@/components/all-language-select.tsx";
@@ -164,7 +164,7 @@ const BookForm = () => {
                 </div>
 
             </div>
-            <Button type="submit" className="w-full mt-2 col-span-2">
+            <Button type="submit" className="w-full mt-2 col-span-2 bg-blue-600 hover:bg-blue-700">
                 Add New Book
             </Button>
         </form>

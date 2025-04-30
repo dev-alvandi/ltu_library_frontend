@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import axiosInstance from "@/config/api.ts";
 import {getErrorMessage} from "@/utils/getErrorMessage.ts";
-import {AuthResponse} from "@/store/authSlice.ts";
+import {AuthResponse} from "@/store/auth-slice.ts";
 import {createInitialPaginationResponse, PaginationResponse} from "@/types/entitiesType.ts";
 
 
@@ -14,6 +14,7 @@ export interface LoanItemResponse {
     dueAt: string;
     isReturned: boolean;
     status: "RETURNED" | "NOT_RETURNED" | "OVERDUE";
+    extendable: boolean
 }
 
 export interface ReservationResponse {
@@ -98,6 +99,32 @@ export const borrowBook = createAsyncThunk<
     try {
         const response = await axiosInstance.post(`/api/user/borrow/${bookId}`);
         return response.data.message || "Book borrowed successfully";
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+export const returnResource = createAsyncThunk<
+    string, // success message
+    string, // barcode
+    { rejectValue: string }
+>("user/returnResource", async (barcode, thunkAPI) => {
+    try {
+        const response = await axiosInstance.put(`/api/user/return-resource/${barcode}`);
+        return response.data; // or response.data.message if your backend wraps it
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+export const extendResource = createAsyncThunk<
+    string, // success message
+    string, // loanId
+    { rejectValue: string }
+>("user/extendResource", async (loanId, thunkAPI) => {
+    try {
+        const response = await axiosInstance.put(`/api/user/extend-loan/${loanId}`);
+        return response.data; // or response.data.message if you return a wrapped object
     } catch (error) {
         return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
@@ -197,6 +224,35 @@ const userSlice = createSlice({
                 state.status = "failed";
                 state.error = action.payload || "Borrowing failed";
             })
+
+            .addCase(returnResource.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(returnResource.fulfilled, (state, action: PayloadAction<string>) => {
+                state.status = "succeeded";
+                state.error = null;
+                console.log("Return success:", action.payload);
+            })
+            .addCase(returnResource.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Failed to return resource.";
+            })
+
+            .addCase(extendResource.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(extendResource.fulfilled, (state, action: PayloadAction<string>) => {
+                state.status = "succeeded";
+                state.error = null;
+                console.log("Extension success:", action.payload);
+            })
+            .addCase(extendResource.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Failed to extend the loan.";
+            })
+
 
             .addCase(getLoanItems.pending, (state) => {
                 state.status = "loading";

@@ -1,10 +1,10 @@
 import {useEffect, useMemo, useState} from "react";
-import FilterBookGrid from "@/pages/_resources/books/filterBookGrid.tsx";
-import SearchBookGrid from "@/pages/_resources/books/searchBookGrid.tsx";
-import BookResourceGrid from "@/pages/_resources/books/bookResourceGrid.tsx";
+import FilterBookGrid from "@/pages/_resources/books/filter-book-grid.tsx";
+import SearchBookGrid from "@/pages/_resources/books/search-book-grid.tsx";
+import BookResourceGrid from "@/pages/_resources/books/book-resource-grid.tsx";
 import {FILTERS_TYPE} from "@/pages/_resources/books/type.ts";
 import {useAppDispatch, useAppSelector} from "@/store/store.ts";
-import {allBooksFilters, filteredBooks, getAllBooks, searchBooks} from "@/store/bookSlice.ts";
+import {allBooksFilters, filteredBooks, getAllBooks, searchBooks} from "@/store/book-slice.ts";
 import {
     Sheet,
     SheetContent,

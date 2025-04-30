@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import {useDispatch} from "react-redux";
 import {cn} from "@/lib/utils.ts";
-import {borrowBook} from "@/store/userSlice.ts";
+import {borrowBook} from "@/store/user-slice.ts";
 
 interface Props {
     book: Pick<

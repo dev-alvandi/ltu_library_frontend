@@ -23,7 +23,7 @@ import {
     DialogDescription
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import {deleteBook, fetchBookById, updateBook} from "@/store/bookSlice";
+import {deleteBook, fetchBookById, updateBook} from "@/store/book-slice.ts";
 import {toast} from "react-toastify";
 import BookCopyManage from "@/pages/manage-resources/_book/_book-copy/book-copy-manage.tsx";
 import {useNavigate} from "react-router";

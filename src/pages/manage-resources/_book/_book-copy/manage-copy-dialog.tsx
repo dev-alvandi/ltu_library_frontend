@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useAppDispatch } from "@/store/store.ts";
-import { deleteBookCopy } from "@/store/bookCopySlice.ts";
+import { deleteBookCopy } from "@/store/book-copy-slice.ts";
 import { toast } from "react-toastify";
 import { Formik, Form } from "formik";
 

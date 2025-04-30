@@ -7,7 +7,7 @@ import {
     UNAUTHENTICATED_NAVBAR_PATHS_TYPE,
 } from "@/constants.ts";
 import {useEffect, useState} from "react";
-import {logout} from "@/store/authSlice.ts";
+import {logout} from "@/store/auth-slice.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Menu} from "lucide-react";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet.tsx";

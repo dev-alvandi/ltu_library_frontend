@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {RootState, useAppDispatch, useAppSelector} from "@/store/store";
-import {BookCopyRequest, fetchBookCopiesByBookId, updateBookCopy} from "@/store/bookCopySlice";
+import {BookCopyRequest, fetchBookCopiesByBookId, updateBookCopy} from "@/store/book-copy-slice.ts";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "@/components/ui/pagination";
 import AddNewCopyDialog from "@/pages/manage-resources/_book/_book-copy/add-new-copy-dialog.tsx";
 import BookCopyTable from "@/pages/manage-resources/_book/_book-copy/book-copy-table.tsx";

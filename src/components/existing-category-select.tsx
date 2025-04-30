@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
-import { allBooksFilters } from "@/store/bookSlice.ts";
+import { allBooksFilters } from "@/store/book-slice.ts";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
 
 interface ExistingCategorySelectProps {

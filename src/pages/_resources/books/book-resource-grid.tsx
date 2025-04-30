@@ -6,8 +6,8 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination.tsx";
-import {PaginationBookResponse} from "@/store/bookSlice.ts";
-import BookResource from "@/pages/_resources/books/bookResource.tsx";
+import {PaginationBookResponse} from "@/store/book-slice.ts";
+import BookResource from "@/pages/_resources/books/book-resource.tsx";
 
 interface Props {
     results: PaginationBookResponse | null;

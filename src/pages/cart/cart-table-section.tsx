@@ -16,7 +16,7 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination";
-import { removeFromCart } from "@/store/libraryActionsSlice"; // Adjust this import to your actual path
+import { removeFromCart } from "@/store/library-actions-slice.tsx"; // Adjust this import to your actual path
 
 interface CartItem {
     id: string;
