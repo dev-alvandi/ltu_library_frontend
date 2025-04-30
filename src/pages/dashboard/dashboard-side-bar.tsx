@@ -12,7 +12,7 @@ const DashboardSideBar = ({userType}: { userType: string }) => {
             roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC"]
         },
         {label: "Add Resources", path: DASHBOARD_NAVBAR_PATHS["Add Resources"], roles: ["LIBRARIAN", "ADMIN"]},
-        {label: "Employee Management", path: DASHBOARD_NAVBAR_PATHS["Employee Management"], roles: ["ADMIN"]},
+        // {label: "Employee Management", path: DASHBOARD_NAVBAR_PATHS["Employee Management"], roles: ["ADMIN"]},
     ];
 
     // Filter based on role

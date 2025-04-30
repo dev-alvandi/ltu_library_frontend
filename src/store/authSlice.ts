@@ -120,7 +120,6 @@ const authSlice = createSlice({
                 state.token = action.payload.token;
                 state.registerStatus = 'succeeded';
                 state.error = null;
-                console.log(action.payload)
             })
             .addCase(loginUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
                 state.user = action.payload.user;

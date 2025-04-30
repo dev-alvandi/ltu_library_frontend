@@ -98,7 +98,6 @@ export default function Authentication() {
         if (isRegister && date) {
             const registerValues = {...values as RegisterValues, dateOfBirth: format(date, "yyyy/MM/dd")};
             delete registerValues.confirmPassword;
-            console.log(registerValues)
             const result = await dispatch(registerUser(registerValues));
 
             if (registerUser.fulfilled.match(result)) {
@@ -107,10 +106,8 @@ export default function Authentication() {
                 // navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
                 setIsRegister(false)
             } else if (registerUser.rejected.match(result)) {
-                console.log(result.payload)
                 toast.error(`Registration failed: ${result.payload}`);
             }
-            // console.log("Register:", submittingValues);
         } else {
             const submittingValues = values as LoginValues;
 
@@ -123,7 +120,6 @@ export default function Authentication() {
                 navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
                 // Redirect if needed, e.g., navigate("/login")
             } else if (loginUser.rejected.match(result)) {
-                console.log(result.payload)
                 toast.error(`Login failed: ${result.payload}`, {
                     position: "bottom-right",
                 });

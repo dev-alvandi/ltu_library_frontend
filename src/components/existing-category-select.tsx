@@ -11,7 +11,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
 import { allBooksFilters } from "@/store/bookSlice.ts";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
-import capitalizer from "@/utils/capitalizer.ts";
 
 interface ExistingCategorySelectProps {
     value: string;
@@ -74,7 +73,7 @@ const ExistingCategorySelect = ({ value, onChange }: ExistingCategorySelectProps
                     <Input
                         placeholder="New category..."
                         value={newCategory}
-                        onChange={(e) => setNewCategory(capitalizer(e.target.value))}
+                        onChange={(e) => setNewCategory(e.target.value)}
                         onKeyDown={(e) => e.stopPropagation()} // Keep input editable inside dropdown
                     />
                     <Button

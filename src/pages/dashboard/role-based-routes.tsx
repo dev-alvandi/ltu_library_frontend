@@ -15,16 +15,16 @@ const RoleBasedRoutes = ({ userType }: { userType: string }) => {
         <Route key="reservations" path={DASHBOARD_NAVBAR_PATHS["My Reservations"].split("/")[2]} element={<MyReservations />} />,
     ];
 
-    const adminRoutes = [
-        <Route
-            key="employee-management"
-            path={DASHBOARD_NAVBAR_PATHS["Employee Management"].split("/")[2]}
-            element={
-                <ProtectedRoute allowedRoles={["ADMIN"]}>
-                    <div>Employee Management Page</div>
-                </ProtectedRoute>
-            }
-        />,
+    const adminRoutes: never[] = [
+        // <Route
+        //     key="employee-management"
+        //     path={DASHBOARD_NAVBAR_PATHS["Employee Management"].split("/")[2]}
+        //     element={
+        //         <ProtectedRoute allowedRoles={["ADMIN"]}>
+        //             <div>Employee Management Page</div>
+        //         </ProtectedRoute>
+        //     }
+        // />,
     ];
 
     const librarianRoutes = [

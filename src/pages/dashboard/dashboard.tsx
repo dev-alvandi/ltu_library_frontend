@@ -9,7 +9,7 @@ const Dashboard = () => {
     const user = useAppSelector((state) => state.auth.user);
 
     return (
-        <div className="grid grid-cols-12 h-[calc(100vh-5rem)]">
+        <div className="grid grid-cols-12 h-[calc(100vh-5rem)] pt-12">
             {/* Desktop Static Sidebar */}
             <div className="hidden lg:block col-span-3">
                 <div className="sticky top-20 h-[calc(100vh-6rem)] overflow-auto pr-2">

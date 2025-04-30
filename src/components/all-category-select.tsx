@@ -11,7 +11,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts";
 import { useAppDispatch, useAppSelector } from "@/store/store.ts";
 import { getAllCategories } from "@/store/bookSlice.ts";
-import capitalizer from "@/utils/capitalizer.ts";
 
 interface AllCategoriesSelectProps {
     value: string;
@@ -67,7 +66,7 @@ const AllCategoriesSelect = ({ value, onChange }: AllCategoriesSelectProps) => {
                     <Input
                         placeholder="New category..."
                         value={newCategory}
-                        onChange={(e) => setNewCategory(capitalizer(e.target.value))}
+                        onChange={(e) => setNewCategory(e.target.value)}
                         onKeyDown={(e) => e.stopPropagation()}
                     />
                     <Button
