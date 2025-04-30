@@ -6,6 +6,7 @@ import AddNewCopyDialog from "@/pages/manage-resources/_book/_book-copy/add-new-
 import BookCopyTable from "@/pages/manage-resources/_book/_book-copy/book-copy-table.tsx";
 import ManageCopyDialog from "@/pages/manage-resources/_book/_book-copy/manage-copy-dialog.tsx";
 import {toast} from "react-toastify";
+import {deepEqual} from "@/utils/deep-equal.ts";
 
 const BookCopyManage = ({ bookId }: { bookId: string }) => {
     const dispatch = useAppDispatch();
@@ -31,16 +32,16 @@ const BookCopyManage = ({ bookId }: { bookId: string }) => {
         setCurrentPage(page);
     };
 
-    const handleUpdate = async () => {
+    const handleUpdate = async (newSelectCopy: BookCopyRequest) => {
 
-        if (selectedCopy == null) {
+        if (deepEqual(newSelectCopy, selectedCopy)) {
             return;
         }
 
-        await dispatch(updateBookCopy(selectedCopy));
+        const result = await dispatch(updateBookCopy(newSelectCopy));
         await dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }) as any);
 
-        if (status === "succeeded") {
+        if (updateBookCopy.fulfilled.match(result)) {
             toast.success("Book copy updated");
         } else {
             toast.error("An error occurred during updating the book copy")
@@ -105,7 +106,6 @@ const BookCopyManage = ({ bookId }: { bookId: string }) => {
             {selectedCopy && (
                 <ManageCopyDialog
                     handleUpdate={handleUpdate}
-
                     openManageCopyDialog={openManageCopyDialog}
                     setOpenManageCopyDialog={setOpenManageCopyDialog}
                     openDeleteDialog={openDeleteDialog}

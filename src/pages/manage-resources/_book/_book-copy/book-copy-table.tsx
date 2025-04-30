@@ -34,7 +34,7 @@ const BookCopyTable = ({ copies, onManage }: { copies: any[], onManage: (copy: a
                                     copy.status === "AVAILABLE"
                                         ? "bg-green-700 text-white"
                                         : copy.status === "BORROWED"
-                                            ? "bg-yellow-700 text-black"
+                                            ? "bg-yellow-700 text-white"
                                             : "bg-red-700 text-white"
                                 }
                             >

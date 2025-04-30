@@ -7,7 +7,7 @@ import {createInitialPaginationResponse, PaginationResponse} from "@/types/entit
 
 
 export interface LoanItemResponse {
-    loanItemId: string; // UUID
+    loanId: string; // UUID
     imageUrl: string;
     title: string;
     borrowedAt: string;

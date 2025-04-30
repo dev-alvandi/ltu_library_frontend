@@ -9,6 +9,7 @@ interface TableLoanProps {
 }
 
 const TableLoan = ({ loans }: TableLoanProps) => {
+    console.log(loans)
     return (
         <Table className="text-sm">
             <TableHeader>
@@ -24,7 +25,7 @@ const TableLoan = ({ loans }: TableLoanProps) => {
             <TableBody>
                 {loans.map((loan) => (
                     <TableRow
-                        key={loan.loanItemId}
+                        key={loan.loanId}
                         className="hover:bg-[#2e2e35] transition border-b border-[#2a2a2a] text-center"
                     >
                         <TableCell className="py-3">
@@ -59,7 +60,7 @@ const TableLoan = ({ loans }: TableLoanProps) => {
                             </Badge>
                         </TableCell>
                         <TableCell>
-                            <TableAction id={loan.loanItemId} title={loan.title} status={loan.status} />
+                            <TableAction id={loan.loanId} title={loan.title} status={loan.status} />
                         </TableCell>
                     </TableRow>
                 ))}
