@@ -49,12 +49,13 @@ function App() {
     return (
         <>
             <Routes>
-                <Route path="auth" element={<Authentication/>}/>
-                <Route path="auth/password-reset" element={<RequestPasswordReset/>}/>
-                <Route path="auth/password-reset/:token" element={<PasswordReset/>}/>
-
                 <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Home"]} element={<Layout/>}>
+                    <Route path="auth" element={<Authentication/>}/>
+                    <Route path="auth/password-reset" element={<RequestPasswordReset/>}/>
+                    <Route path="auth/password-reset/:token" element={<PasswordReset/>}/>
+
                     <Route index element={<Home/>}/>
+
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Contact Us"]} element={<Contact/>}/>
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Books"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["books"]}/>}/>
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Films"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["films"]} />}/>
@@ -73,7 +74,8 @@ function App() {
                     } />
                 </Route>
             </Routes>
-            <ToastContainer position="top-right" autoClose={3000}/>
+
+            <ToastContainer position="top-right" autoClose={3000} className="mt-12"/>
         </>
     )
 }

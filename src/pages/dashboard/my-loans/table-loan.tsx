@@ -11,8 +11,6 @@ interface TableLoanProps {
 
 const TableLoan = ({ loans, onTableAction }: TableLoanProps) => {
 
-    console.log(loans)
-
     return (
         <Table className="text-sm">
             <TableHeader>

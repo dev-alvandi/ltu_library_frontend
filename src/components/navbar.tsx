@@ -11,6 +11,7 @@ import {logout} from "@/store/auth-slice.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Menu} from "lucide-react";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet.tsx";
+import {toast} from "react-toastify";
 
 const Navbar = () => {
     const location = useLocation();
@@ -29,6 +30,13 @@ const Navbar = () => {
             setNavbarItems(UNAUTHENTICATED_NAVBAR_PATHS);
         }
     }, [user]);
+
+    const handleLogout = (label: string) => {
+        if (label === "Logout") {
+            dispatch(logout());
+            toast.success("You are logged out.")
+        }
+    }
 
     return (
         <nav className="fixed top-0 left-0 flex w-full h-20 items-center bg-[#030712] z-40 px-6">
@@ -82,7 +90,7 @@ const Navbar = () => {
                                         <Link
                                             key={label}
                                             to={path}
-                                            onClick={() => label === "Logout" && dispatch(logout())}
+                                            onClick={handleLogout.bind(null, label)}
                                             className={`block px-4 py-2 rounded text-sm font-medium transition-all duration-200
                       ${location.pathname === path ? "bg-blue-500 text-white" : "text-gray-300 hover:bg-gray-700"}`}
                                         >

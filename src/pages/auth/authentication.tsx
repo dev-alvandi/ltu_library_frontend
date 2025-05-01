@@ -114,15 +114,11 @@ export default function Authentication() {
             const result = await dispatch(loginUser(submittingValues))
 
             if (loginUser.fulfilled.match(result)) {
-                toast.success('Login successful!', {
-                    position: "bottom-right",
-                });
+                toast.success('Login successful!');
                 navigate(UNAUTHENTICATED_NAVBAR_PATHS["Home"]);
                 // Redirect if needed, e.g., navigate("/login")
             } else if (loginUser.rejected.match(result)) {
-                toast.error(`Login failed: ${result.payload}`, {
-                    position: "bottom-right",
-                });
+                toast.error(`Login failed: ${result.payload}`);
             }
         }
 

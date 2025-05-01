@@ -263,7 +263,6 @@ const userSlice = createSlice({
                 state.status = "succeeded";
                 state.error = null;
 
-                console.log(action.payload)
             })
             .addCase(getLoanItems.rejected, (state, action) => {
                 state.status = "failed";
@@ -279,7 +278,6 @@ const userSlice = createSlice({
                 state.status = "succeeded";
                 state.error = null;
 
-                console.log(action.payload)
             })
             .addCase(fetchUserReservations.rejected, (state, action) => {
                 state.status = "failed";
