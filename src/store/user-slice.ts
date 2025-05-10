@@ -4,8 +4,6 @@ import {getErrorMessage} from "@/utils/getErrorMessage.ts";
 import {AuthResponse} from "@/store/auth-slice.ts";
 import {createInitialPaginationResponse, PaginationResponse} from "@/types/entitiesType.ts";
 
-
-
 export interface LoanItemResponse {
     loanId: string; // UUID
     imageUrl: string;
@@ -103,6 +101,20 @@ export const borrowBook = createAsyncThunk<
         return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
 });
+
+export const reserveBook = createAsyncThunk<
+    ReservationResponse,
+    string, // bookId
+    { rejectValue: string }
+>("user/reserveBook", async (bookId, thunkAPI) => {
+    try {
+        const response = await axiosInstance.post<ReservationResponse>(`/api/user/reserve/${bookId}`);
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+});
+
 
 export const returnResource = createAsyncThunk<
     string, // success message
@@ -223,6 +235,20 @@ const userSlice = createSlice({
             .addCase(borrowBook.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload || "Borrowing failed";
+            })
+
+            .addCase(reserveBook.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(reserveBook.fulfilled, (state, action: PayloadAction<ReservationResponse>) => {
+                state.status = "succeeded";
+                state.error = null;
+                state.reservations.content.unshift(action.payload); // Optional: Add new reservation to UI list
+            })
+            .addCase(reserveBook.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload || "Failed to reserve book.";
             })
 
             .addCase(returnResource.pending, (state) => {

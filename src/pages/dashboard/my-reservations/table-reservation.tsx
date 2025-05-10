@@ -16,9 +16,10 @@ export interface Reservation {
 interface TableReservationProps {
     reservations: ReservationResponse[];
     onRemove: (id: string) => void;
+    onBorrow: (id: string) => void;
 }
 
-const TableReservation = ({ reservations, onRemove }: TableReservationProps) => {
+const TableReservation = ({ reservations, onRemove, onBorrow }: TableReservationProps) => {
     return (
         <Table className="text-sm">
             <TableHeader>
@@ -31,30 +32,40 @@ const TableReservation = ({ reservations, onRemove }: TableReservationProps) => 
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {reservations.map((res) => (
+                {reservations.map((reservation) => (
                     <TableRow
-                        key={res.reservationId}
+                        key={reservation.reservationId}
                         className="hover:bg-[#2e2e35] transition border-b border-[#2a2a2a] text-center"
                     >
                         <TableCell>
                             <img
-                                src={res.imageUrl}
-                                alt={res.title}
+                                src={reservation.imageUrl}
+                                alt={reservation.title}
                                 className="w-10 h-14 object-cover mx-auto rounded shadow-sm"
                             />
                         </TableCell>
-                        <TableCell className="font-medium text-white">{res.title}</TableCell>
+                        <TableCell className="font-medium text-white">{reservation.title}</TableCell>
                         <TableCell className="text-gray-300">
-                            {format(res.reservedAt, "MMMM do, yyyy")}
+                            {format(reservation.reservedAt, "MMMM do, yyyy")}
                         </TableCell>
                         <TableCell>
                             <Badge variant="secondary" className="bg-(--color-blue-theme) text-white">
-                                {res.queuePosition}
+                                {reservation.queuePosition}
                             </Badge>
                         </TableCell>
-                        <TableCell>
-                            <TableAction id={res.reservationId} title={res.title} onRemove={onRemove} />
-                        </TableCell>
+                        {
+                            reservation.queuePosition > 0 ? (
+                                <TableCell>
+                                    <TableAction id={reservation.reservationId} title={reservation.title} type="REMOVE"
+                                                 handleAction={onRemove}/>
+                                </TableCell>
+                            ) : (
+                                <TableCell>
+                                    <TableAction id={reservation.reservationId} title={reservation.title} type="BORROW"
+                                                 handleAction={onBorrow}/>
+                                </TableCell>
+                                )
+                        }
                     </TableRow>
                 ))}
             </TableBody>

@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import {useDispatch} from "react-redux";
 import {cn} from "@/lib/utils.ts";
-import {borrowBook} from "@/store/user-slice.ts";
+import {borrowBook, reserveBook} from "@/store/user-slice.ts";
 
 interface Props {
     book: Pick<
@@ -60,7 +60,16 @@ const BookResource = ({ book, userType }: Props) => {
 
             } else {
                 // here!!!!!!!!!!!!!!
-                toast.info(`Successfully reserved book!`);
+                const result = await dispatch(reserveBook(book.bookId));
+
+                if (reserveBook.fulfilled.match(result)) {
+                    toast.info(`Successfully reserved book!`);
+                } else if (reserveBook.rejected.match(result)) {
+                    const error = result.payload || "Failed to reserve book!";
+                    toast.error(error);
+                }
+
+
             }
         } else {
             navigate(UNAUTHENTICATED_NAVBAR_PATHS["Login | Register"]);

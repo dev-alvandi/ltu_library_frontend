@@ -16,6 +16,10 @@ const MyReservations = () => {
         console.log(id)
     }
 
+    const handleBorrow = (id: string) => {
+        console.log(id)
+    }
+
     useEffect(() => {
         dispatch(fetchUserReservations(page - 1))
     }, [page]);
@@ -29,6 +33,7 @@ const MyReservations = () => {
                 <TableReservation
                     reservations={content}
                     onRemove={handleRemove}
+                    onBorrow={handleBorrow}
                 />
                 <PaginationControls page={page} setPage={setPage} pageCount={totalPages} />
             </div>
