@@ -151,6 +151,17 @@
     }
 }
 
+@layer utilities {
+    .clip-left {
+        clip-path: polygon(0 0, 100% 100%, 0% 100%);
+    }
+
+    .clip-right {
+        clip-path: polygon(100% 100%, 0 0, 100% 0);
+    }
+}
+
+
 body {
     background-color: #030712;
     color: var(--color-text-white);

@@ -1,41 +1,46 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { BookOpen, User } from "lucide-react";
+import {Card, CardContent} from "@/components/ui/card";
 
 const Home = () => {
 
     return (
-        <main className="flex flex-col items-center justify-center min-h-[80vh] px-6 py-12 bg-transparent text-foreground space-y-8">
-            <Card className="w-full max-w-3xl shadow-2xl rounded-2xl bg-card border-muted p-6 text-center space-y-6">
-                <h1 className="text-4xl font-bold libre-baskerville text-[--color-blue-theme]">
-                    Welcome to Luleå University Library
-                </h1>
-                <p className="text-gray-600 dark:text-gray-300 text-lg">
-                    Your digital hub for borrowing books, managing reservations, and exploring academic resources.
-                </p>
-
-                <div className="flex justify-center items-center gap-4 flex-wrap">
-                    <Button size="lg" className="bg-[--color-blue-theme] text-white hover:brightness-110">
-                        <BookOpen className="mr-2 h-5 w-5" />
-                        Browse Books
-                    </Button>
-                    <Button variant="outline" size="lg" className="border-[--color-blue-theme] text-[--color-blue-theme]">
-                        <User className="mr-2 h-5 w-5" />
-                        Log In
-                    </Button>
+        <main className="relative min-h-[80vh] text-foreground pt-12">
+            {/* Desktop layout */}
+            <div className="px-2">
+                <div className="relative hidden md:flex min-h-[40vh]">
+                    <img src="/home.jpg" alt="Home Image" className="absolute w-full h-full clip-left object-cover"/>
+                    <div className="w-full bg-blue-100 clip-right px-5 flex flex-col justify-center">
+                        <h1 className="lg:text-4xl text-2xl font-extrabold roboto text-(--color-blue-theme) flex justify-end">
+                            Welcome to Luleå University Library
+                        </h1>
+                        <p className="lg:text-xl text-base open-sans mt-4 text-black dark:text-gray-300 flex justify-end text-end">
+                            Your digital hub for borrowing books and films, <br/>
+                            managing reservations, and exploring <br/>
+                            academic resources.
+                        </p>
+                    </div>
                 </div>
+            </div>
 
-                <Separator className="my-6" />
-
-                <CardContent className="flex justify-center">
-                    <img
-                        src="/logo-blue-background-transparent.png"
-                        alt="Students reading"
-                        className="max-h-64 rounded-xl shadow-md"
-                    />
-                </CardContent>
-            </Card>
+            {/* Mobile layout */}
+            <div className="flex flex-col md:hidden space-y-6 p-6">
+                <Card className="shadow-2xl border-none py-6 bg-(--color-blue-theme)">
+                    <CardContent className="flex flex-col">
+                        <h1 className="text-4xl font-bold font-librebaskerville text-white">
+                            Welcome to Luleå University Library
+                        </h1>
+                        <p className="text-xl text-gray-300 dark:text-gray-300 mt-4">
+                            Your digital hub for borrowing books and films,
+                            managing reservations, and exploring
+                            academic resources.
+                        </p>
+                    </CardContent>
+                </Card>
+                <img
+                    src="/home.jpg"
+                    alt="Students reading"
+                    className="w-full rounded-xl shadow-md"
+                />
+            </div>
         </main>
     );
 

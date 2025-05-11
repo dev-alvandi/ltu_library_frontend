@@ -56,7 +56,7 @@ const Navbar = () => {
                                 key={label}
                                 to={path}
                                 onClick={() => label === "Logout" && dispatch(logout())}
-                                className={`px-4 py-2 rounded text-sm font-medium transition-all duration-200
+                                className={`lg:px-4 lg:py-2 px-2 py-1 rounded text-sm whitespace-nowrap font-medium transition-all duration-200
                 ${location.pathname === path ? "bg-blue-500 text-white" : "text-gray-300 hover:bg-gray-700"}`}
                             >
                                 {label}
