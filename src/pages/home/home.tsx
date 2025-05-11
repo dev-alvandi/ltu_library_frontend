@@ -1,9 +1,12 @@
 import {Card, CardContent} from "@/components/ui/card";
+import {useNavigate} from "react-router";
+import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 
 const Home = () => {
+    const navigate = useNavigate();
 
     return (
-        <main className="relative min-h-[80vh] text-foreground pt-12">
+        <main className="relative min-h-[80vh] text-foreground pt-20">
             {/* Desktop layout */}
             <div className="px-2">
                 <div className="relative hidden md:flex min-h-[40vh]">
@@ -41,6 +44,48 @@ const Home = () => {
                     className="w-full rounded-xl shadow-md"
                 />
             </div>
+
+            {/* Feature Cards Section */}
+            <section className="w-full px-4 lg:px-20 py-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Book Card */}
+                    <Card
+                        className="transition-transform duration-300 hover:scale-105 cursor-pointer shadow-xl"
+                        onClick={() =>  navigate(UNAUTHENTICATED_NAVBAR_PATHS["Books"])}
+                    >
+                        <CardContent className="p-6 flex flex-col items-center text-center">
+                            <img src="/books.jpg" alt="Books" className="h-36 w-36 mb-4" />
+                            <h2 className="text-xl font-semibold">Books</h2>
+                            <p className="text-gray-500">Browse and borrow from a wide collection of academic and leisure books.</p>
+                        </CardContent>
+                    </Card>
+
+                    {/* Film Card */}
+                    <Card
+                        className="transition-transform duration-300 hover:scale-105 cursor-pointer shadow-xl"
+                        onClick={() =>  navigate(UNAUTHENTICATED_NAVBAR_PATHS["Films"])}
+                    >
+                        <CardContent className="p-6 flex flex-col items-center text-center">
+                            <img src="/films.jpg" alt="Films" className="h-36 w-36 mb-4" />
+                            <h2 className="text-xl font-semibold">Films</h2>
+                            <p className="text-gray-500">Access documentaries, educational videos, and entertainment films.</p>
+                        </CardContent>
+                    </Card>
+
+                    {/* Magazine Card */}
+                    <Card
+                        className="transition-transform duration-300 hover:scale-105 cursor-pointer shadow-xl"
+                        onClick={() =>  navigate(UNAUTHENTICATED_NAVBAR_PATHS["Magazines"])}
+                    >
+                        <CardContent className="p-6 flex flex-col items-center text-center">
+                            <img src="/magazines.jpg" alt="Magazines" className="h-36 w-36 mb-4" />
+                            <h2 className="text-xl font-semibold">Magazines</h2>
+                            <p className="text-gray-500">Stay updated with the latest academic journals and digital magazines.</p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+
         </main>
     );
 

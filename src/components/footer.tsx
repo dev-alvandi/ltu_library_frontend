@@ -28,7 +28,7 @@ export default function Footer() {
                     <Separator />
 
 
-                    <div className="flex justify-between gap-6 mt-6">
+                    <div className="flex flex-wrap justify-between gap-6 mt-6">
                         {/* Contact column */}
                         <div>
                             <h3 className="font-semibold mb-2">Contact</h3>
