@@ -44,7 +44,7 @@ const TableReservation = ({ reservations, onRemove, onBorrow }: TableReservation
                                 className="w-10 h-14 object-cover mx-auto rounded shadow-sm"
                             />
                         </TableCell>
-                        <TableCell className="font-medium text-white">{reservation.title}</TableCell>
+                        <TableCell className="font-medium whitespace-normal max-w-40 text-white text-left">{reservation.title}</TableCell>
                         <TableCell className="text-gray-300">
                             {format(reservation.reservedAt, "MMMM do, yyyy")}
                         </TableCell>

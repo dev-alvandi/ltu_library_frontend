@@ -14,7 +14,7 @@ const TableLoan = ({ loans, onTableAction }: TableLoanProps) => {
     return (
         <Table className="text-sm">
             <TableHeader>
-                <TableRow className="bg-[#2c2c2f] text-white text-center">
+                <TableRow className="bg-[#2c2c2f] text-white">
                     <TableHead className="text-white text-center">Image</TableHead>
                     <TableHead className="text-white text-center">Title</TableHead>
                     <TableHead className="text-white text-center">Borrowed At</TableHead>
@@ -36,7 +36,7 @@ const TableLoan = ({ loans, onTableAction }: TableLoanProps) => {
                                 className="w-10 h-14 object-cover mx-auto rounded shadow-sm"
                             />
                         </TableCell>
-                        <TableCell className="font-medium text-white">{loan.title}</TableCell>
+                        <TableCell className="font-medium whitespace-normal max-w-40 text-white text-left">{loan.title}</TableCell>
                         <TableCell className="text-gray-300">
                             {format(loan.borrowedAt, "MMMM d, yyyy")}
                         </TableCell>

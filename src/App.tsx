@@ -62,7 +62,7 @@ function App() {
                     <Route path={UNAUTHENTICATED_NAVBAR_PATHS["Magazines"]} element={<SearchBookResources resource={ALL_POSSIBLE_RESOURCES["magazines"]} />}/>
                     <Route path={`${AUTHENTICATED_NAVBAR_PATHS["Dashboard"]}/*`} element={
                         <ProtectedRoute
-                            allowedRoles={["LIBRARIAN", "ADMIN", "STUDENT", "UNIVERSITY STAFF", "PUBLIC"]}>
+                            allowedRoles={["LIBRARIAN", "ADMIN", "STUDENT", "RESEARCHER", "UNIVERSITY STAFF", "PUBLIC"]}>
                                 <Dashboard />
                         </ProtectedRoute>
                     } />

@@ -63,7 +63,7 @@ const BookResource = ({ book, userType }: Props) => {
                 const result = await dispatch(reserveBook(book.bookId));
 
                 if (reserveBook.fulfilled.match(result)) {
-                    toast.info(`Successfully reserved book!`);
+                    toast.success(`Successfully reserved book!`);
                 } else if (reserveBook.rejected.match(result)) {
                     const error = result.payload || "Failed to reserve book!";
                     toast.error(error);

@@ -19,6 +19,8 @@ const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) => {
         return ["ADMIN", "LIBRARIAN", "STUDENT", "RESEARCHER", "UNIVERSITY STAFF", "PUBLIC"].includes(role);
     };
 
+    console.log(userType);
+
 // Usage
     useEffect(() => {
         if (userType && isValidUserRole(userType) && !allowedRoles.includes(userType) && !wasDenied) {

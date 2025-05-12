@@ -4,12 +4,12 @@ import {DASHBOARD_NAVBAR_PATHS} from "@/constants.ts";
 const DashboardSideBar = ({userType}: { userType: string }) => {
     // Define access control per route
     const SIDEBAR_LINKS = [
-        {label: "Profile", path: DASHBOARD_NAVBAR_PATHS["Profile"], roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC"]},
-        {label: "My Loans", path: DASHBOARD_NAVBAR_PATHS["My Loans"], roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC"]},
+        {label: "Profile", path: DASHBOARD_NAVBAR_PATHS["Profile"], roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC", "RESEARCHER"]},
+        {label: "My Loans", path: DASHBOARD_NAVBAR_PATHS["My Loans"], roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC", "RESEARCHER"]},
         {
             label: "My Reservations",
             path: DASHBOARD_NAVBAR_PATHS["My Reservations"],
-            roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC"]
+            roles: ["STUDENT", "LIBRARIAN", "ADMIN", "UNIVERSITY STAFF", "PUBLIC", "RESEARCHER"]
         },
         {label: "Manage Resources", path: DASHBOARD_NAVBAR_PATHS["Manage Resources"], roles: ["LIBRARIAN", "ADMIN"]},
         // {label: "Employee Management", path: DASHBOARD_NAVBAR_PATHS["Employee Management"], roles: ["ADMIN"]},
