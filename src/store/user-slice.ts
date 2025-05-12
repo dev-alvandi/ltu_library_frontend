@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import axiosInstance from "@/config/api.ts";
+import axiosInstance from "@/configuration/api.ts";
 import {getErrorMessage} from "@/utils/getErrorMessage.ts";
 import {AuthResponse} from "@/store/auth-slice.ts";
 import {createInitialPaginationResponse, PaginationResponse} from "@/types/entitiesType.ts";

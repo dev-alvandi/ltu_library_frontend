@@ -1,7 +1,7 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {AuthValues} from "@/pages/auth/type.ts";
-import axiosInstance, {API_BASE_URL} from "@/config/api.ts";
+import axiosInstance, {API_BASE_URL} from "@/configuration/api.ts";
 import {PasswordResetValues, RequestPasswordResetValues} from "@/pages/auth/password-reset/type.ts";
 import {User} from "@/types/entitiesType.ts";
 import {getErrorMessage} from "@/utils/getErrorMessage.ts";

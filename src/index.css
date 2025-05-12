@@ -161,6 +161,15 @@
     }
 }
 
+::selection {
+    background: var(--color-blue-theme);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--color-blue-theme);
+    color: white;
+}
 
 body {
     background-color: #030712;

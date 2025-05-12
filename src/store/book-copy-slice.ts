@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axiosInstance from "@/config/api.ts";
+import axiosInstance from "@/configuration/api.ts";
 import { getErrorMessage } from "@/utils/getErrorMessage.ts";
 
 
