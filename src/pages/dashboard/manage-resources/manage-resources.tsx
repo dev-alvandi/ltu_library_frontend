@@ -32,7 +32,7 @@ const ManageResources = () => {
     };
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="px-6 space-y-6">
             <>
                 <h2 className="text-xl font-semibold text-white">Add Resource Management</h2>
                 <Tabs className="pb-6" value={activeTab} onValueChange={setActiveTab}>

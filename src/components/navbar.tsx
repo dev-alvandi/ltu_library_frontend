@@ -12,6 +12,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {Menu} from "lucide-react";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet.tsx";
 import {toast} from "react-toastify";
+import {cn} from "@/lib/utils.ts";
 
 const Navbar = () => {
     const location = useLocation();
@@ -56,8 +57,9 @@ const Navbar = () => {
                                 key={label}
                                 to={path}
                                 onClick={() => label === "Logout" && dispatch(logout())}
-                                className={`lg:px-4 lg:py-2 px-2 py-1 rounded text-sm whitespace-nowrap font-medium transition-all duration-200
-                ${location.pathname === path ? "bg-blue-500 text-white" : "text-gray-300 hover:bg-gray-700"}`}
+                                className={
+                                cn("/" + location.pathname.split("/")[1] === path ? "bg-blue-500 text-white" : "text-gray-300 hover:bg-gray-700",
+                                    "lg:px-4 lg:py-2 px-2 py-1 rounded text-sm whitespace-nowrap font-medium transition-all duration-200")}
                             >
                                 {label}
                             </Link>

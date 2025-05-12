@@ -94,7 +94,7 @@ const SearchBookResources = ({resource}: { resource: string }) => {
             {/* Filter Sidebar */}
                 {/* Desktop Static Sidebar */}
                 <div className="hidden lg:block col-span-3">
-                    <div className="sticky top-20 h-[calc(100vh-6rem)] overflow-auto pr-2">
+                    <div className="sticky top-20 min-h-[calc(100vh-6rem)] overflow-auto pr-2">
                         <FilterBookGrid
                             userFilters={userFilters}
                             allFilters={allFilters}
