@@ -4,7 +4,7 @@ import { getErrorMessage } from "@/utils/getErrorMessage.ts";
 
 
 
-interface BookCopyResponse {
+export interface BookCopyResponse {
     bookCopyId: string;
     barcodeId: string;
     barcodeUrl: string;
@@ -168,7 +168,6 @@ const bookCopySlice = createSlice({
             .addCase(fetchBookCopiesByBookId.fulfilled, (state, action: PayloadAction<PaginationBookCopyResponse>) => {
                 state.status = "succeeded";
                 state.copies = action.payload;
-                console.log(action.payload)
             })
             .addCase(fetchBookCopiesByBookId.rejected, (state, action) => {
                 state.status = "failed";

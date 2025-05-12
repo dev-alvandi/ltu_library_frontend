@@ -29,7 +29,7 @@ import BookCopyManage from "@/pages/manage-resources/_book/_book-copy/book-copy-
 import {useNavigate} from "react-router";
 import {UNAUTHENTICATED_NAVBAR_PATHS} from "@/constants.ts";
 
-const BookManage = ({id}: { id: string }) => {
+const ManageBook = ({id}: { id: string }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const BookManage = ({id}: { id: string }) => {
             author: fetchedBook?.author || "",
             publisher: fetchedBook?.publisher || "",
             publishedYear: fetchedBook?.publishedYear || "",
-            bookType: fetchedBook?.bookType || "",
+            bookType: fetchedBook?.bookType === "COURSE_LITERATURE" ? "Course Literature" : "Public",
             language: fetchedBook?.language || "",
             category: fetchedBook?.bookCategory.subject || "",
             image: fetchedBook?.imageUrl || null,
@@ -59,7 +59,7 @@ const BookManage = ({id}: { id: string }) => {
             formData.append("author", values.author);
             formData.append("publisher", values.publisher);
             formData.append("publishedYear", values.publishedYear.toString());
-            formData.append("bookType", values.bookType);
+            formData.append("bookType", values.bookType === "Course Literature" ? "COURSE_LITERATURE" : "PUBLIC");
             formData.append("language", values.language);
             formData.append("category", values.category);
 
@@ -203,7 +203,7 @@ const BookManage = ({id}: { id: string }) => {
                         <label htmlFor="type">Book Type</label>
                         <Select
                             value={formik.values.bookType}
-                            onValueChange={(val) => formik.setFieldValue("type", val)}
+                            onValueChange={(val) => formik.setFieldValue("bookType", val)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select Book Type">
@@ -248,4 +248,4 @@ const BookManage = ({id}: { id: string }) => {
     );
 };
 
-export default BookManage;
+export default ManageBook;

@@ -10,25 +10,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { useDispatch } from "react-redux";
-import { createBookCopy, fetchBookCopiesByBookId } from "@/store/book-copy-slice.ts";
+import {createBookCopy, fetchBookCopiesByBookId} from "@/store/book-copy-slice.ts";
 import { toast } from "react-toastify";
 import { Formik, Form } from "formik";
+import {useAppDispatch} from "@/store/store.ts";
 
-const AddNewCopyDialog = ({ open, setOpen, bookId, currentPage }: any) => {
-    const dispatch = useDispatch();
+interface Props {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    bookId: string;
+    currentPage: number;
+}
+const AddNewCopyDialog = ({ open, setOpen, bookId, currentPage }: Props) => {
+    const dispatch = useAppDispatch();
 
     const handleCreateSubmit = async (
         values: { type: string; location: string },
-        { setSubmitting, resetForm }: any
+        { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }
     ) => {
         const result = await dispatch(createBookCopy({
             bookCopyId: bookId,
             physicalLocation: values.location,
             itemReferenceCopy: values.type === "REFERENCE"
-        }) as any);
+        }));
 
-        await dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }) as any);
+        await dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }));
 
         if (createBookCopy.fulfilled.match(result)) {
             toast.success("Book copy created successfully");

@@ -1,8 +1,14 @@
 import { Table, TableHead, TableHeader, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {BookCopyResponse} from "@/store/book-copy-slice.ts";
 
-const BookCopyTable = ({ copies, onManage }: { copies: any[], onManage: (copy: any) => void }) => {
+interface Props {
+    copies: BookCopyResponse[],
+    onManage: (copy: BookCopyResponse) => void
+}
+
+const BookCopyTable = ({ copies, onManage }: Props) => {
     return (
         <Table className="text-sm">
             <TableHeader>

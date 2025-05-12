@@ -4,14 +4,19 @@ import Footer from "@/components/footer.tsx";
 
 const Layout = () => {
     return (
-        <div className="max-w-[1300px] m-auto">
+        <div className="">
             <Navbar />
-            <main className="mt-20">
-                <Outlet />
+
+            <main className="flex-1">
+                <div className="max-w-[1300px] w-full m-auto pt-20">
+                    <Outlet />
+                </div>
             </main>
+
             <Footer />
         </div>
     );
 };
 
 export default Layout;
+

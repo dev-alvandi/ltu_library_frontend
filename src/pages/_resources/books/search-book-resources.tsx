@@ -90,7 +90,7 @@ const SearchBookResources = ({resource}: { resource: string }) => {
     // }
 
     return (
-        <div className="grid grid-cols-12 h-[calc(100vh-5rem)] pt-12">
+        <div className="grid grid-cols-12 min-h-[calc(100vh-5rem)] pt-12">
             {/* Filter Sidebar */}
                 {/* Desktop Static Sidebar */}
                 <div className="hidden lg:block col-span-3">

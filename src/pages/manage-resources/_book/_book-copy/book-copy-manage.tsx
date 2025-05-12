@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {RootState, useAppDispatch, useAppSelector} from "@/store/store";
-import {BookCopyRequest, fetchBookCopiesByBookId, updateBookCopy} from "@/store/book-copy-slice.ts";
+import {BookCopyRequest, deleteBookCopy, fetchBookCopiesByBookId, updateBookCopy} from "@/store/book-copy-slice.ts";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "@/components/ui/pagination";
 import AddNewCopyDialog from "@/pages/manage-resources/_book/_book-copy/add-new-copy-dialog.tsx";
 import BookCopyTable from "@/pages/manage-resources/_book/_book-copy/book-copy-table.tsx";
@@ -20,12 +20,8 @@ const BookCopyManage = ({ bookId }: { bookId: string }) => {
 
     const [selectedCopy, setSelectedCopy] = useState<BookCopyRequest | null>(null);
 
-    const [bookCopyStatus, setBookCopyStatus] = useState("");
-    const [bookCopyType, setBookCopyType] = useState("");
-    const [bookCopyLocation, setBookCopyLocation] = useState("");
-
     useEffect(() => {
-        dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }) as any);
+        dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }));
     }, [dispatch, bookId, currentPage]);
 
     const handlePagination = (page: number) => {
@@ -39,7 +35,7 @@ const BookCopyManage = ({ bookId }: { bookId: string }) => {
         }
 
         const result = await dispatch(updateBookCopy(newSelectCopy));
-        await dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }) as any);
+        await dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }));
 
         if (updateBookCopy.fulfilled.match(result)) {
             toast.success("Book copy updated");
@@ -50,17 +46,26 @@ const BookCopyManage = ({ bookId }: { bookId: string }) => {
         setOpenManageCopyDialog(false);
     };
 
+    const handleConfirmDeleteBookCopy = async (bookCopyId: string) => {
+        const result = await dispatch(deleteBookCopy(bookCopyId))
 
-    const handleOpenManageDialog = (copy: any) => {
+        if (deleteBookCopy.fulfilled.match(result)) {
+            toast.success("Book copy deleted");
+            await dispatch(fetchBookCopiesByBookId({ bookId, page: currentPage }))
+        } else {
+            toast.error("An error occurred during deleting the book copy")
+        }
+        setOpenDeleteDialog(false);
+        setOpenManageCopyDialog(false);
+    };
+
+    const handleOpenManageDialog = (copy: BookCopyRequest) => {
         setSelectedCopy({
             bookCopyId: copy.bookCopyId,
             itemReferenceCopy: copy.itemReferenceCopy,
             physicalLocation: copy.physicalLocation,
             status: copy.status,
         });
-        setBookCopyType(copy.itemReferenceCopy ? "REFERENCE" : "BORROWABLE");
-        setBookCopyLocation(copy.physicalLocation);
-        setBookCopyStatus(copy.status);
         setOpenManageCopyDialog(true);
     };
 
@@ -106,18 +111,12 @@ const BookCopyManage = ({ bookId }: { bookId: string }) => {
             {selectedCopy && (
                 <ManageCopyDialog
                     handleUpdate={handleUpdate}
+                    handleConfirmDeleteBookCopy={handleConfirmDeleteBookCopy}
                     openManageCopyDialog={openManageCopyDialog}
                     setOpenManageCopyDialog={setOpenManageCopyDialog}
                     openDeleteDialog={openDeleteDialog}
                     setOpenDeleteDialog={setOpenDeleteDialog}
                     selectedCopy={selectedCopy}
-                    setSelectedCopy={setSelectedCopy}
-                    bookCopyLocation={bookCopyLocation}
-                    setBookCopyLocation={setBookCopyLocation}
-                    bookCopyType={bookCopyType}
-                    setBookCopyType={setBookCopyType}
-                    bookCopyStatus={bookCopyStatus}
-                    setBookCopyStatus={setBookCopyStatus}
                 />
             )}
         </div>

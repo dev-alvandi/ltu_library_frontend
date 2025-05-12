@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import BookManage from "@/pages/manage-resources/_book/book-manage.tsx";
+import ManageBook from "@/pages/manage-resources/_book/manage-book.tsx";
 
 const ManageResources = () => {
     const { '*': path } = useParams();
@@ -8,7 +8,7 @@ const ManageResources = () => {
     const renderResourceManager = () => {
         switch (resourceType) {
             case "books":
-                return <BookManage id={id} />;
+                return <ManageBook id={id} />;
             // case "films":
             //     return <FilmManage id={id} />;
             // case "magazines":

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/pagination.tsx";
 import {PaginationBookResponse} from "@/store/book-slice.ts";
 import BookResource from "@/pages/_resources/books/book-resource.tsx";
+import {cn} from "@/lib/utils.ts";
 
 interface Props {
     results: PaginationBookResponse | null;
@@ -95,7 +96,7 @@ const BookResourceGrid = ({results, resourceName, currentPage, setCurrentPage, u
                     {getPageRange().map((page) => (
                         <PaginationItem key={page}>
                             <PaginationLink
-                                className="cursor-pointer text-black"
+                                className={cn(currentPage === page && "text-black", "cursor-pointer")}
                                 onClick={() => handlePageChange(page)}
                                 isActive={currentPage === page}
                             >

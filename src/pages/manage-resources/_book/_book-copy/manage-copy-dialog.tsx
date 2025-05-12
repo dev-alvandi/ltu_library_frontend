@@ -9,33 +9,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { useAppDispatch } from "@/store/store.ts";
-import { deleteBookCopy } from "@/store/book-copy-slice.ts";
-import { toast } from "react-toastify";
 import { Formik, Form } from "formik";
+import {BookCopyRequest} from "@/store/book-copy-slice.ts";
+
+interface Props {
+    handleUpdate: (book: any) => void;
+    handleConfirmDeleteBookCopy: (bookCopyId: string) => void;
+    openManageCopyDialog: boolean;
+    setOpenManageCopyDialog: (open: boolean) => void;
+    openDeleteDialog: boolean;
+    setOpenDeleteDialog: (open: boolean) => void;
+    selectedCopy: BookCopyRequest;
+}
 
 const ManageCopyDialog = ({
                               handleUpdate,
-                              openManageCopyDialog, setOpenManageCopyDialog,
-                              openDeleteDialog, setOpenDeleteDialog,
+                              handleConfirmDeleteBookCopy,
+                              openManageCopyDialog,
+                              setOpenManageCopyDialog,
+                              openDeleteDialog,
+                              setOpenDeleteDialog,
                               selectedCopy,
-                          }: any) => {
-    const dispatch = useAppDispatch();
-
-    console.log(selectedCopy)
-
-    const handleConfirmDelete = async () => {
-        const result = await dispatch(deleteBookCopy(selectedCopy.id))
-
-        if (deleteBookCopy.fulfilled.match(result)) {
-            toast.success("Book copy deleted");
-        } else {
-            toast.error("An error occurred during deleting the book copy")
-        }
-        setOpenDeleteDialog(false);
-        setOpenManageCopyDialog(false);
-    };
-
+                          }: Props) => {
     return (
         <Dialog open={openManageCopyDialog} onOpenChange={setOpenManageCopyDialog}>
             <DialogContent className="bg-[#030712] text-white border border-[#2a2a2a] rounded-lg">
@@ -130,7 +125,7 @@ const ManageCopyDialog = ({
                                             </Button>
                                             <Button
                                                 variant="destructive"
-                                                onClick={handleConfirmDelete}
+                                                onClick={() => handleConfirmDeleteBookCopy(selectedCopy.bookCopyId)}
                                                 className="bg-red-600 hover:bg-red-700"
                                             >
                                                 Confirm Delete
