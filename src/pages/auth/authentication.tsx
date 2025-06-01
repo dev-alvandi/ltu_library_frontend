@@ -154,6 +154,7 @@ export default function Authentication() {
                                                     as={Input}
                                                     type="text"
                                                     className="auth-field-style"
+                                                    data-testid="register-firstName"
                                                 />
                                                 <ErrorMessage
                                                     name="firstName"
@@ -168,6 +169,7 @@ export default function Authentication() {
                                                     as={Input}
                                                     type="text"
                                                     className="auth-field-style"
+                                                    data-testid="register-lastName"
                                                 />
                                                 <ErrorMessage
                                                     name="lastName"
@@ -182,6 +184,7 @@ export default function Authentication() {
                                                 <Popover>
                                                     <PopoverTrigger asChild>
                                                         <Button
+                                                            data-testid="dob-trigger"
                                                             variant="outline"
                                                             className={cn(
                                                                 "w-full justify-center text-left font-normal bg-transparent border border-[#2c2c2c] hover:bg-transparent cursor-pointer text-gray-400 hover:text-gray-400",
@@ -192,13 +195,15 @@ export default function Authentication() {
                                                             {date ? format(date, "PPP") : <span>Pick a date</span>}
                                                         </Button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-full p-0 bg-[#111] border-[#2c2c2c]">
+                                                    <PopoverContent
+                                                        data-testid="dob-calendar"
+                                                        className="w-full p-0 bg-[#111] border-[#2c2c2c]"
+                                                    >
                                                         <Calendar
                                                             mode="single"
                                                             selected={date}
                                                             onSelect={setDate}
                                                             className="bg-[#111] text-gray-400"
-                                                            navClassName=""
                                                             monthClassName="flex flex-col gap-4"
                                                         />
                                                     </PopoverContent>
@@ -212,6 +217,7 @@ export default function Authentication() {
                                                 as={Input}
                                                 type="text"
                                                 className="auth-field-style"
+                                                data-testid="register-phoneNumber"
                                             />
                                             <ErrorMessage
                                                 name="phoneNumber"
@@ -220,7 +226,6 @@ export default function Authentication() {
                                             />
                                         </div>
                                         <div className="flex flex-col gap-2 md:flex-row md:gap-4">
-
                                             <div className="auth-input-style">
                                                 <label htmlFor="city" className="auth-label-style">City</label>
                                                 <Field
@@ -228,6 +233,7 @@ export default function Authentication() {
                                                     as={Input}
                                                     type="text"
                                                     className="auth-field-style"
+                                                    data-testid="register-city"
                                                 />
                                                 <ErrorMessage
                                                     name="city"
@@ -242,6 +248,7 @@ export default function Authentication() {
                                                     as={Input}
                                                     type="text"
                                                     className="auth-field-style"
+                                                    data-testid="register-street"
                                                 />
                                                 <ErrorMessage
                                                     name="street"
@@ -256,6 +263,7 @@ export default function Authentication() {
                                                     as={Input}
                                                     type="text"
                                                     className="auth-field-style"
+                                                    data-testid="register-postalCode"
                                                 />
                                                 <ErrorMessage
                                                     name="postalCode"
@@ -273,6 +281,7 @@ export default function Authentication() {
                                         as={Input}
                                         type="email"
                                         className="auth-field-style"
+                                        data-testid="email"
                                     />
                                     <ErrorMessage
                                         name="email"
@@ -291,6 +300,7 @@ export default function Authentication() {
                                         as={Input}
                                         type="password"
                                         className="auth-field-style"
+                                        data-testid="password"
                                     />
                                     <ErrorMessage
                                         name="password"
@@ -307,6 +317,7 @@ export default function Authentication() {
                                             as={Input}
                                             type="password"
                                             className="auth-field-style"
+                                            data-testid="register-confirmPassword"
                                         />
                                         <ErrorMessage
                                             name="confirmPassword"
@@ -315,9 +326,12 @@ export default function Authentication() {
                                         />
                                     </div>
                                 )}
-                                <Button type="submit"
-                                        disabled={isRegister ? registerStatus === 'loading' : authenticationStatus === 'loading'}
-                                        className="cursor-pointer custom-btn">
+                                <Button
+                                    type="submit"
+                                    disabled={isRegister ? registerStatus === 'loading' : authenticationStatus === 'loading'}
+                                    className="cursor-pointer custom-btn"
+                                    data-testid="submit"
+                                >
                                     {isRegister ? "Create Account" : "Login"}
                                 </Button>
                                 <button
@@ -326,6 +340,7 @@ export default function Authentication() {
                                         return setIsRegister(!isRegister);
                                     }}
                                     className="text-sm duration-200 text-gray-400 hover:text-white mt-2 cursor-pointer"
+                                    data-testid="change-authentication-form"
                                 >
                                     {isRegister
                                         ? "Already have an account? Login"

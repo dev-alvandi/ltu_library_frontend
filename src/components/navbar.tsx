@@ -54,6 +54,7 @@ const Navbar = () => {
                     {navbarItems &&
                         Object.entries(navbarItems).map(([label, path]) => (
                             <Link
+                                data-testid={`navbar-${label.toLowerCase()}`}
                                 key={label}
                                 to={path}
                                 onClick={() => label === "Logout" && dispatch(logout())}
